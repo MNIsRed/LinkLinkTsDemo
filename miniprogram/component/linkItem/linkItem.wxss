@@ -1,0 +1,79 @@
+/* component/linkItem/linkItem.wxss */
+.item {
+  display: flex;
+  margin-top: 140rpx;
+  border-style: solid;
+  border-radius: 16rpx;
+  height: 108rpx;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  /* 元素的总宽度和总高度（包括边框和内边距）将等于width和height的值 */
+  box-sizing: border-box;
+  color: #0A0D0F
+}
+
+.word {
+  margin-left: 48rpx;
+  margin-right: 96rpx;
+}
+
+.meaning {
+  margin-left: 96rpx;
+  margin-right: 48rpx;
+}
+
+.wordArea .unselect {
+  border-width: 3rpx;
+  border-color: #DBDDE0;
+}
+
+.meaningArea .unselect {
+  border-width: 3rpx;
+  border-color: #DBDDE0;
+  border-style: dashed;
+}
+
+.wordArea .onSelect {
+  border-width: 6rpx;
+  border-color: #FCC434;
+}
+
+.meaningArea .onSelect {
+  border-width: 6rpx;
+  border-color: #FCC434;
+}
+
+.wordArea .selected {
+  border-width: 6rpx;
+  border-color: #37C23E;
+}
+
+.meaningArea .selected {
+  border-width: 6rpx;
+  border-color: #37C23E;
+}
+
+.wordArea .correct {
+  border-style: none;
+  background-color: #37C23E;
+  color: white;
+}
+
+.meaningArea .correct {
+  border-style: none;
+  background-color: #37C23E;
+  color: white;
+}
+
+.wordArea .wrong {
+  border-style: none;
+  background-color: #F76C53;
+  color: white;
+}
+
+.meaningArea .wrong {
+  border-style: none;
+  background-color: #F76C53;
+  color: white;
+}

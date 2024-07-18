@@ -1,0 +1,12 @@
+<!--index.wxml-->
+
+<canvas id="myCanvas" type="2d" style="top: 0;left: 0;position: absolute;border: 1px solid; width:{{canvasW}}px; height:{{canvasH}}px;" bind:touchstart="canvasTouchStart" bind:touchmove="canvasTouchMove" bind:touchend="canvasTouchEnd">
+</canvas>
+
+<view style="flex-direction:column;margin-top: 218rpx;">
+  <linkItem id="linkItem" dataList="{{words}}"></linkItem>
+
+  <button style="margin-top: 120rpx;" bind:tap="nextPage">下一页</button>
+
+
+</view>

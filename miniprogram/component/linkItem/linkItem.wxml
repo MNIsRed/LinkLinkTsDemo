@@ -1,0 +1,27 @@
+<!--component/linkItem/linkItem.wxml-->
+<!-- 处理数据 -->
+<wxs module="model">
+  var wordList = function (res) {
+    return res.map(function (item) { return item.word })
+  }
+  var meaningList = function (res) {
+    return res.map(function (item) { return item.meaning })
+  }
+  module.exports = {
+    wordList: wordList,
+    meaningList: meaningList
+  }
+</wxs>
+
+<view style="display: flex; flex-direction: row; margin-top: -140rpx;">
+  <view class="wordArea" style="flex-grow: 1;flex-shrink: 0;width:50%;">
+    <view class="item word {{status[0][index]}}" wx:for="{{wordList}}" id="word">
+      {{item}}
+    </view>
+  </view>
+  <view class="meaningArea" style="flex-grow: 1;flex-shrink: 0;width:50%;">
+    <view class="item meaning {{status[1][index]}}" wx:for="{{meaningList}}" id="meaning">
+      {{item}}
+    </view>
+  </view>
+</view>
