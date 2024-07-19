@@ -1,6 +1,12 @@
 import { CanvasDraw } from "../canvas/canvasDraw";
 import {Coordinate} from "../utils/util"
 
+export interface LinkResult {
+  wordIndex: number,
+  meaningIndex: number
+  correct: Boolean
+}
+
 export interface LinkAreaCoordinate{
   from:Coordinate|null,
   end:Coordinate|null
@@ -22,7 +28,9 @@ export enum Status {
 
 export interface WordDataInterface {
   words: Array<WordBean>,
-  page:number
+  page:number,
+  barHeight:number,
+  canvasTopMargin:number,
   canvasTool: CanvasDraw,
   canvasW: number,
   canvasH: number

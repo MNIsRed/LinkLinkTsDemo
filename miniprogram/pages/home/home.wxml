@@ -1,0 +1,6 @@
+<!--pages/home/home.wxml-->
+<top></top>
+<view style="display:flex;margin-top: 94rpx;">
+  <image src="https://oss.fxwljy.com/attach/file1721367685773.webp" class="homeIcon" bind:tap="goIndex"></image>
+  <image src="https://oss.fxwljy.com/attach/file1721367684829.webp" class="homeIcon" bind:tap="goIndex"></image>
+</view>

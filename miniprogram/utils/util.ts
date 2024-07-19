@@ -86,3 +86,14 @@ function removeArrayRepeatItem(array:WordBean[]):WordBean[]{
   })
   return newArray
 }
+
+const windowWidth = wx.getSystemInfoSync().windowWidth;
+const pixelRatio = wx.getSystemInfoSync().pixelRatio;
+
+export function convertToPx(rpx:number) {
+  return rpx * (windowWidth / 750);
+}
+
+export function convertToRpx(px:number) {
+  return px / (windowWidth / 750);
+}

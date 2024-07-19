@@ -1,1 +1,9 @@
 /**index.wxss**/
+.gradientBackground{
+  position: absolute;
+  top: 0;
+  width: 100%;
+  
+  height: 500rpx;
+  background: linear-gradient(#CFFFF1,#CFFFF100);
+}

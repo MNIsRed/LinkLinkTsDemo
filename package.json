@@ -1,15 +1,16 @@
 {
   "name": "miniprogram-ts-less-quickstart",
   "version": "1.0.0",
-  "description": "",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
-  "license": "",
+  "license": "ISC",
   "dependencies": {
+    "lottie-miniprogram": "^1.0.12"
   },
   "devDependencies": {
     "miniprogram-api-typings": "^2.8.3-1"
-  }
+  },
+  "main": ".eslintrc.js",
+  "description": ""
 }

@@ -1,12 +1,8 @@
 // component/linkItem/linkItem.ts
-import { WordBean, Status, status2Color, LinkAreaCoordinate } from '../../utils/linkCommon';
+import { WordBean, Status, status2Color, LinkAreaCoordinate, LinkResult } from '../../utils/linkCommon';
 import { shuffleArray, Coordinate, save2ErrorBook } from '../../utils/util'
 
-interface LinkResult {
-  wordIndex: number,
-  meaningIndex: number
-  correct: Boolean
-}
+
 
 
 Component({
@@ -91,9 +87,11 @@ Component({
           let wrongWords = [] as WordBean[]
           newLinkedResult.forEach((item) => {
             if (!item.correct) {
+              // 真实数据对应真实顺序
+              let realIndex = this.data.wordRandomList[item.wordIndex]
               wrongWords.push({
-                word: this.data.dataList[item.wordIndex].word,
-                meaning: this.data.dataList[item.wordIndex].meaning
+                word: this.data.dataList[realIndex].word,
+                meaning: this.data.dataList[realIndex].meaning
               } as WordBean)
             }
             newStatus[0][item.wordIndex] = item.correct ? Status.CORRECT : Status.WRONG

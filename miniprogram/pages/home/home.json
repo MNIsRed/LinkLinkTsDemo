@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "linkItem": "../../component/linkItem/linkItem",
     "top":"../../component/top/top"
   },
   "navigationStyle": "custom"

@@ -9,6 +9,8 @@ interface LinkItemArea {
 
 interface IAppOption {
   globalData: {
-    area: Array<Array<LinkItemArea>>
+    area: Array<Array<LinkItemArea>>,
+    statusBarHeight:number,
+    barHeight:number
   }
 }

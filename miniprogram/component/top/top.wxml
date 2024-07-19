@@ -1,0 +1,5 @@
+<!--component/top/top.wxml-->
+<view class="gradientBackground"> </view>
+<view class="customBar" style="height: {{barHeight+'px'}};padding-top:{{statusBarHeight+'px'}}">
+  <mp-icon icon="back" color="black" size="{{iconSize}}" class="backIcon" bind:tap="goBack"></mp-icon>
+</view>
