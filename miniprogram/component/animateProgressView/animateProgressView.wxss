@@ -1,0 +1,58 @@
+/* compont/animateProgressView.wxss */
+
+.animate-bg {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-progress-bg {
+  height: 36rpx;
+  background-color: #DAFAEF;
+  z-index: 999;
+  border-radius: 4rpx;
+  box-shadow: 0rpx 1rpx 3rpx 0 #B2EDDC inset;
+  position: relative;
+}
+
+.inner-progress-bg {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30rpx;
+}
+
+.inner-progress-top {
+  background-color:#3BD843;
+  height: 13rpx;
+  border-radius: 4rpx 0 0 0;
+}
+
+.inner-progress-bottom {
+  background-color:#37C23E;
+  height: 24rpx;
+  border-radius: 0 0 0 4rpx;
+}
+
+.progress-level-text-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: right;
+  height: 36rpx;
+  line-height: 36rpx;
+}
+
+.progress-level-text {
+  margin-right: 20rpx;
+  font-size: 28rpx;
+  font-weight: 350;
+  color: white; /* 文本颜色 */
+  text-shadow: 
+    -2rpx -2rpx 0 #009008, /* 左上角阴影 */
+    2rpx -2rpx 0 #009008,  /* 右上角阴影 */
+    -2rpx 2rpx 0 #009008,  /* 左下角阴影 */
+    2rpx 2rpx 0 #009008;   /* 右下角阴影 */
+}

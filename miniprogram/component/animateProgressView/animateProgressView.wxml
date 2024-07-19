@@ -1,0 +1,17 @@
+<!--compont/animateProgressView.wxml-->
+<view class="animate-bg" style="height: {{progressViewHeight}}rpx;">
+  <view id="animate-log-bg" style="width: 55rpx; height: 103rpx; position: absolute; top: {{progressViewHeight - 103}}rpx; left: {{ipLogoTargetX}}px;" hidden="{{isJumpLogoHidden}}">
+    <image id="animate-logo" src="./ip_logo.png" style="width: 55rpx; height: 103rpx;" />
+  </view>
+  <view style="height: {{progressViewHeight - 36}}rpx;"></view>
+  <image id="animate-logo-standup" src="./ip_logo_standup.png" style="width: 48rpx; height: 100rpx; position: absolute; top: {{progressViewHeight - 100}}rpx; left: {{ipLogoTargetX}}px;" hidden="{{!isJumpLogoHidden}}"/>
+  <view class="animate-progress-bg">
+    <view class="inner-progress-bg" style="width:{{progressInnerLineWidth}}px;">
+      <view class="inner-progress-top"></view>
+      <view class="inner-progress-bottom"></view>
+    </view>
+    <view class="progress-level-text-bg" style="width:{{progressLeveTexWidth}}px;">
+      <text class="progress-level-text">{{currentLevel}}/{{totalLevel}}</text>
+    </view>
+  </view>
+</view>
