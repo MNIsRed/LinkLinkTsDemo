@@ -23,9 +23,9 @@ Page({
     page: 0,
     barHeight: getApp<IAppOption>().globalData.barHeight,
     canvasTopMargin: convertToPx(250),
-    progressInfo:{
-      totalLevel:9,
-      currentLevel:1
+    progressInfo: {
+      totalLevel: 9,
+      currentLevel: 1
     }
   } as WordDataInterface,
   ani: null as any,
@@ -46,7 +46,7 @@ Page({
       size: true
     })
     query.exec((res) => {
-      console.log("单词区域",res)
+      console.log("单词区域", res)
       app.globalData.area = res
     });
   },
@@ -89,7 +89,7 @@ Page({
     }
   },
   canvasTouchStart(e: any) {
-    console.log("开始点击",e)
+    console.log("开始点击", e)
     if (linkFinished) return;
     canMove = true;
     let touchAction = this.touchBegin(e as WechatMiniprogram.Touch);
@@ -156,7 +156,7 @@ Page({
   onReady() {
     const query = wx.createSelectorQuery()
     query.select('#myCanvas')
-      .fields({ node: true, size: true , rect: true})
+      .fields({ node: true, size: true, rect: true })
       .exec((res) => {
         const canvas = res[0].node as WechatMiniprogram.Canvas
         const ctx = canvas.getContext('2d')
@@ -167,7 +167,7 @@ Page({
         let canvasH = (windowInfo.windowHeight - this.data.barHeight - this.data.canvasTopMargin)
         canvas.width = canvasW * dpr
         canvas.height = canvasH * dpr
-        let canvasTool = new CanvasDraw(canvas, ctx, canvasW, canvasH)
+        let canvasTool = new CanvasDraw(canvas, ctx, canvasW, canvasH, res.top)
         this.setData({
           canvasTool: canvasTool,
           canvasW: canvasW,
@@ -204,11 +204,11 @@ Page({
     console.log("动画结束", this.ani)
     this.ani.destroy()
   },
-  addLevel(){
+  addLevel() {
     let newProgress = this.data.progressInfo
     newProgress.currentLevel++;
     this.setData({
-      progressInfo:newProgress
+      progressInfo: newProgress
     })
   }
 })
