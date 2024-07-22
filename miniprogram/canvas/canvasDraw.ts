@@ -88,6 +88,9 @@ class CanvasDraw {
     if (unFinishPointLineArr && unFinishPointLineArr.length > 0) {
       console.log("=======点击连线完成", unFinishPointLineArr)
       let pointLine = unFinishPointLineArr[0]
+      if (pointLine.startPoint && pointLine.startPoint.x === linePoint.x) {
+        return
+      }
       pointLine.endPoint = linePoint
       pointLine.isFinishStroke = true
       return
@@ -262,6 +265,15 @@ class CanvasDraw {
       y: itemArea.top + (itemArea.bottom - itemArea.top) * 0.5
     }
   }
+
+
+cleanAllLine() {
+   if (!this.pointContainer){
+     return
+   }
+   this.pointContainer.points = []
+   this.pointContainer.currentPointLine = {}
+}
 }
 
 export {
