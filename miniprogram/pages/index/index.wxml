@@ -1,14 +1,13 @@
 <!--index.wxml-->
+<view style="height: 100vh;display: flex;flex-direction: column;">
+  <top bind:tap="addLevel" style="flex-grow: 0;"></top>
 
-<top></top>
+  <animateProgressView style="flex-grow: 0;" progressInfo="{{progressInfo}}"></animateProgressView>
+  <canvas id="tipCanvas" type="2d" style="width: 100rpx;height: 50rpx;flex-grow: 0;"></canvas>
+  <view style="display: flex;flex-grow: 1;align-items: center;flex-direction: row;">
+    <linkItem id="linkItem" dataList="{{words}}" style="width: 100vh;"></linkItem>
 
-<view style="height: 144rpx;"></view>
-
-<canvas id="tipCanvas" type="2d" style="width: 100rpx;"></canvas>
-
-<canvas id="myCanvas" type="2d" style="top: {{barHeight+canvasTopMargin}};left: 0;position: absolute; width:{{canvasW}}px; height:{{canvasH}}px;" bind:touchstart="canvasTouchStart" bind:touchmove="canvasTouchMove" bind:touchend="canvasTouchEnd">
-</canvas>
-
-<view style="flex-direction:column;margin-top: 218rpx;">
-  <linkItem id="linkItem" dataList="{{words}}"></linkItem>
+  </view>
+  <canvas id="myCanvas" type="2d" style="top: {{barHeight+canvasTopMargin+'px'}};left: 0;position: absolute; width:{{canvasW}}px; height:{{canvasH}}px;" bind:touchstart="canvasTouchStart" bind:touchmove="canvasTouchMove" bind:touchend="canvasTouchEnd">
+  </canvas>
 </view>

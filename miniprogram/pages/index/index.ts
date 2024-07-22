@@ -23,6 +23,10 @@ Page({
     page: 0,
     barHeight: getApp<IAppOption>().globalData.barHeight,
     canvasTopMargin: convertToPx(250),
+    progressInfo:{
+      totalLevel:9,
+      currentLevel:1
+    }
   } as WordDataInterface,
   ani: null as any,
   //初始化区域数据
@@ -42,6 +46,7 @@ Page({
       size: true
     })
     query.exec((res) => {
+      console.log("单词区域",res)
       app.globalData.area = res
     });
   },
@@ -66,7 +71,6 @@ Page({
       return false;
     })
     let area = null
-    console.log(targetElement)
     var linkAreaCoordinate = {
       from: null,
       end: null
@@ -85,13 +89,15 @@ Page({
     }
   },
   canvasTouchStart(e: any) {
-    console.log(e)
+    console.log("开始点击",e)
     if (linkFinished) return;
     canMove = true;
     let touchAction = this.touchBegin(e as WechatMiniprogram.Touch);
     if (touchAction.area != null) {
       if (touchAction.linkFinished.from != null && touchAction.linkFinished.end != null) {
-        this.data.canvasTool.pointToLineFinish(app.globalData.area[touchAction.linkFinished.from.row][touchAction.linkFinished.from.col], app.globalData.area[touchAction.linkFinished.end.row][touchAction.linkFinished.end.col], "#FCC434");
+        this.data.canvasTool.canvasTouchStart(e, touchAction.area, status2Color(Status.SELECTED));
+
+        this.data.canvasTool.pointToLineFinish(app.globalData.area[touchAction.linkFinished.from.row][touchAction.linkFinished.from.col], app.globalData.area[touchAction.linkFinished.end.row][touchAction.linkFinished.end.col], status2Color(Status.SELECTED));
 
         this.checkLinkFinished();
       } else {
@@ -150,14 +156,14 @@ Page({
   onReady() {
     const query = wx.createSelectorQuery()
     query.select('#myCanvas')
-      .fields({ node: true, size: true })
+      .fields({ node: true, size: true , rect: true})
       .exec((res) => {
         const canvas = res[0].node as WechatMiniprogram.Canvas
         const ctx = canvas.getContext('2d')
         let windowInfo = wx.getWindowInfo()
         const dpr = windowInfo.pixelRatio
         const rpxToPx = windowInfo.screenWidth / 750;
-        let canvasW = (windowInfo.windowWidth - (30 * 2) * rpxToPx)
+        let canvasW = (windowInfo.windowWidth)
         let canvasH = (windowInfo.windowHeight - this.data.barHeight - this.data.canvasTopMargin)
         canvas.width = canvasW * dpr
         canvas.height = canvasH * dpr
@@ -197,5 +203,12 @@ Page({
   onUnload() {
     console.log("动画结束", this.ani)
     this.ani.destroy()
+  },
+  addLevel(){
+    let newProgress = this.data.progressInfo
+    newProgress.currentLevel++;
+    this.setData({
+      progressInfo:newProgress
+    })
   }
 })

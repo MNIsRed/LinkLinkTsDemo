@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "linkItem": "../../component/linkItem/linkItem",
-    "top":"../../component/top/top"
+    "top":"../../component/top/top",
+    "animateProgressView":"../../component/animateProgressView/animateProgressView"
   },
   "navigationStyle": "custom"
 }

@@ -30,6 +30,7 @@ export interface WordDataInterface {
   words: Array<WordBean>,
   page:number,
   barHeight:number,
+  progressInfo: ProgressInfo,
   canvasTopMargin:number,
   canvasTool: CanvasDraw,
   canvasW: number,
