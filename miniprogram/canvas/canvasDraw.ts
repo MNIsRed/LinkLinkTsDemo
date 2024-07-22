@@ -1,16 +1,18 @@
 
 class CanvasDraw {
-  constructor(canvas: WechatMiniprogram.Canvas, ctx: WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D, canvasW: number, canvasH: number) {
+  constructor(canvas: WechatMiniprogram.Canvas, ctx: WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D, canvasW: number, canvasH: number, canvasTop:number) {
     this.canvas = canvas
     this.ctx = ctx
     this.canvasW = canvasW
     this.canvasH = canvasH
+    this.canvasTop = canvasTop
     this.loop()
   }
   canvas: WechatMiniprogram.Canvas
   ctx: WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D
   canvasW: number
   canvasH: number
+  canvasTop: number
   animatedId?: number
   pointContainer?: PointContainer
 
@@ -27,10 +29,8 @@ class CanvasDraw {
     if (!this.pointContainer) {
       return
     }
-    // this.ctx.beginPath();
     for (let i = 0; i < this.pointContainer.points.length; i++) {
       this.ctx.beginPath();
-
       let currentPointLine = this.pointContainer.points[i];
       let currentStartPoint = currentPointLine.startPoint
       let currentEndPoint = currentPointLine.endPoint
@@ -39,28 +39,24 @@ class CanvasDraw {
       }
       if (currentStartPoint) {
         this.ctx.moveTo(currentStartPoint.x, currentStartPoint.y); // 移动到上一个点
-        // console.log("ssssssss", currentStartPoint)
       }
       if (currentEndPoint) {
         this.ctx.lineTo(currentEndPoint.x, currentEndPoint.y); // 从上一个点画线到当前点
-        // console.log("ssssssss", currentEndPoint)
       }
-      this.ctx.lineWidth = 2 // 设置线条宽度
+      this.ctx.lineWidth = 3 // 设置线条宽度
       this.ctx.stroke(); // 进   
     }
-    // this.ctx.lineWidth = 2 // 设置线条宽度
-    // this.ctx.stroke(); // 进   
   }
 
 
   canvasTouchStart(e: WechatMiniprogram.Touch, itemArea: LinkItemArea, lineColor: string) {
-    console.log("======", e)
     const x: number = e.touches[0].clientX
     const y: number = e.touches[0].clientY
     let point = <Point>{
       x: x,
       y: y
     }
+    console.log("--------", point)
     let linePoint = this.transformLinePointWithItemArea(point, itemArea)
     console.log("++++++", linePoint)
     if (!linePoint) {
@@ -78,11 +74,25 @@ class CanvasDraw {
         points: pointLines,
         currentPointLine: pointLine
       }
-      console.log(this.pointContainer.points)
-      console.log(this.pointContainer)
-      console.log("---------", pointLine)
       return
     }
+    let unFinishPointLineArr = this.pointContainer.points.filter((value) => {
+      if (value.isFinishStroke) {
+        return false
+      }
+      if (!value.startPoint) {
+        return false
+      }
+      return true
+   })
+   console.log("=======点击连线完成",unFinishPointLineArr, this.pointContainer)
+   if (unFinishPointLineArr && unFinishPointLineArr.length > 0) {
+     console.log("=======点击连线完成",unFinishPointLineArr)
+     let pointLine = unFinishPointLineArr[0]
+     pointLine.endPoint = linePoint
+     pointLine.isFinishStroke = true
+     return
+   }
 
     let existPointToLine: PointToLine = {}
     this.pointContainer.points.forEach((pointToLine) => {
@@ -109,6 +119,7 @@ class CanvasDraw {
       this.pointContainer.currentPointLine = pointLine
       return
     }
+
     let tempPointLineArr = this.pointContainer.points.filter((value) => {
       if (value === existPointToLine && value.isFinishStroke){
         console.log("=======找到已完成连线的item,并剔除", value)
