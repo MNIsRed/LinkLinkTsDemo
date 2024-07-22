@@ -5,6 +5,7 @@
   flex-direction: column;
   position: relative;
   overflow: hidden;
+  margin: 0 30rpx;
 }
 
 .animate-progress-bg {
