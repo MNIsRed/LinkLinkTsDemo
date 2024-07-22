@@ -1,4 +1,4 @@
-export const allWords = [
+export const allWords2 = [
   {
     "word": "actually",
     "meaning": "实际上"
@@ -104,3 +104,50 @@ export const allWords = [
     "meaning": "知识渊博的"
   }
 ]
+
+export const allWords = [
+  {
+    "word": "beautiful",
+    "meaning": "美丽的"
+  },
+  {
+    "word": "challenge",
+    "meaning": "挑战"
+  },
+  {
+    "word": "decision",
+    "meaning": "决定"
+  },
+  {
+    "word": "effort",
+    "meaning": "努力"
+  },
+  {
+    "word": "friendship",
+    "meaning": "友谊"
+  },
+  {
+    "word": "goal",
+    "meaning": "目标"
+  },
+  {
+    "word": "harmony",
+    "meaning": "和谐"
+  },
+  {
+    "word": "inspiration",
+    "meaning": "灵感"
+  },
+  {
+    "word": "journey",
+    "meaning": "旅程"
+  },
+  {
+    "word": "knowledge",
+    "meaning": "知识"
+  },
+  {
+    "word": "leadership",
+    "meaning": "领导力"
+  }
+];

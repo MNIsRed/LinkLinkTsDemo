@@ -4,9 +4,10 @@ import { CanvasDraw } from "../../canvas/canvasDraw";
 
 import { WordDataInterface, Status, LinkAreaCoordinate, status2Color, WordBean, LinkResult } from '../../utils/linkCommon';
 import { Coordinate, find2DIndices, convertToPx } from '../../utils/util'
-import { allWords } from '../../utils/mock'
+import { allWords ,allWords2} from '../../utils/mock'
 import lottie from 'lottie-miniprogram'
 
+let currentWords = allWords
 let app = getApp<IAppOption>()
 interface TouchActionBean {
   area: LinkItemArea | null,
@@ -26,9 +27,13 @@ Page({
     progressInfo: {
       totalLevel: 9,
       currentLevel: 1
-    }
+    },
+    completeShow: false,
   } as WordDataInterface,
   ani: null as any,
+  ctx: {
+    tipCanvas: null as WechatMiniprogram.Canvas | null
+  },
   //初始化区域数据
   initAreaData() {
     const linkItem = this.selectComponent("#linkItem")
@@ -56,6 +61,7 @@ Page({
         page: this.data.page + 1
       })
       this.getWords();
+      // this.addLevel();
     }
   },
   touchBegin(event: WechatMiniprogram.Touch): TouchActionBean {
@@ -132,23 +138,49 @@ Page({
     linkFinished = linkItem.checkLinkFinished();
 
     if (linkFinished) {
-      wx.showToast({ title: "连线完成" });
+      // wx.showToast({ title: "连线完成" });
       (linkItem.getLinkedResult() as LinkResult[]).forEach((item) => {
         this.data.canvasTool.pointToLineFinish(app.globalData.area[0][item.wordIndex], app.globalData.area[1][item.meaningIndex], status2Color(item.correct ? Status.CORRECT : Status.WRONG));
       });
+      this.nextPage();
     }
+  },
+  //
+  showComplePop() {
+    if (this.ctx.tipCanvas) {
+      console.log("tipCanvas", this.ctx.tipCanvas)
+      const dataUrl = this.ctx.tipCanvas.toDataURL("image/png", 0.92);
+      console.log("dataUrl", dataUrl)
+    }
+
+    wx.canvasToTempFilePath({
+      canvas: this.selectComponent('#tipCanvas'),
+      success: (res) => {
+        this.setData({
+          tipTempPath: res.tempFilePath
+        })
+      }
+    })
+    this.setData({
+      completeShow: true
+    })
   },
   //获取当前页单词数据
   getWords() {
     let start = pageSize * this.data.page
     let end = pageSize * (this.data.page + 1)
-    if (pageSize * (this.data.page + 1) > allWords.length) {
-      end = allWords.length
+    if (pageSize * (this.data.page + 1) > currentWords.length) {
+      end = currentWords.length
       stationFinished = true;
+      this.showComplePop();
     }
 
     this.setData({
-      words: allWords.slice(start, end) as WordBean[]
+      progressInfo: {
+        totalLevel: Math.floor(currentWords.length / pageSize) + (((currentWords.length % pageSize) == 0) ? 0 : 1),
+        currentLevel: this.data.page + 1
+      },
+      words: currentWords.slice(start, end) as WordBean[]
     });
     this.initAreaData();
     linkFinished = false;
@@ -171,13 +203,15 @@ Page({
         this.setData({
           canvasTool: canvasTool,
           canvasW: canvasW,
-          canvasH: canvasH
+          canvasH: canvasH,
+          dialogWidth: windowInfo.windowWidth - convertToPx(120)
         })
         ctx.scale(dpr, dpr)
       })
     this.getWords();
 
     this.createSelectorQuery().select('#tipCanvas').node(res => {
+      this.ctx.tipCanvas = res.node as WechatMiniprogram.Canvas
       const canvas = res.node
       const context = canvas.getContext('2d')
       lottie.setup(canvas)
@@ -210,5 +244,22 @@ Page({
     this.setData({
       progressInfo: newProgress
     })
-  }
+  },
+  retry() {
+    stationFinished = false;
+    this.setData({
+      page: 0,
+      completeShow:false
+    });
+    this.getWords();
+  },
+  nextStation() {
+    stationFinished = false;
+    currentWords = allWords2
+    this.setData({
+      page: 0,
+      completeShow:false
+    });
+    this.getWords();
+  },
 })

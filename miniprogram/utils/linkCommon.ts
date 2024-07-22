@@ -30,11 +30,14 @@ export interface WordDataInterface {
   words: Array<WordBean>,
   page:number,
   barHeight:number,
+  completeShow:boolean,
+  tipTempPath:string,
   progressInfo: ProgressInfo,
   canvasTopMargin:number,
   canvasTool: CanvasDraw,
   canvasW: number,
-  canvasH: number
+  canvasH: number,
+  dialogWidth:number
 }
 
 // export interface LinkItemArea {

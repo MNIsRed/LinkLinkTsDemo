@@ -1,13 +1,29 @@
 <!--index.wxml-->
 <view style="height: 100vh;display: flex;flex-direction: column;">
-  <top bind:tap="addLevel" style="flex-grow: 0;"></top>
+  <top style="flex-grow: 0;"></top>
 
   <animateProgressView style="flex-grow: 0;" progressInfo="{{progressInfo}}"></animateProgressView>
-  <canvas id="tipCanvas" type="2d" style="width: 100rpx;height: 50rpx;flex-grow: 0;"></canvas>
+  <canvas wx:if="{{!completeShow}}" id="tipCanvas" type="2d" style="width: 100rpx;height: 50rpx;flex-grow: 0;"></canvas>
+  <image wx:else src="tipTempPath" style="width: 100rpx;height: 50rpx;flex-grow: 0;"></image>
   <view style="display: flex;flex-grow: 1;align-items: center;flex-direction: row;">
-    <linkItem id="linkItem" dataList="{{words}}" style="width: 100vh;"></linkItem>
-
+    <linkItem id="linkItem" dataList="{{words}}" style="width: 100vw;"></linkItem>
   </view>
-  <canvas id="myCanvas" type="2d" style="top: {{barHeight+canvasTopMargin+'px'}};left: 0;position: absolute; width:{{canvasW}}px; height:{{canvasH}}px;" bind:touchstart="canvasTouchStart" bind:touchmove="canvasTouchMove" bind:touchend="canvasTouchEnd">
+  <canvas id="myCanvas" type="2d" style="top: {{barHeight+canvasTopMargin+'px'}};left: 0;position: absolute; width:{{canvasW}}px; height:{{canvasH}}px;" bind:touchstart="canvasTouchStart" bind:touchmove="canvasTouchMove" bind:touchend="canvasTouchEnd" wx:if="{{!completeShow}}">
   </canvas>
 </view>
+
+<page-container custom-style="background-color:transparent;" position="center" show="{{completeShow}}" overlay style="width: 100vw;height: 100vh;" z-index="1000">
+  <view style="position: relative;width: 100%;height: 100%;">
+
+    <image src="https://oss.fxwljy.com/attach/file1721625738588.png" mode="aspectFit" style="position: absolute;width: {{dialogWidth+'px'}};height: {{1.06*dialogWidth+'px'}};z-index: 1003;top: 50%;left: 50%;transform: translate(-50%, -50%);">
+
+      <image src="https://oss.fxwljy.com/attach/file1721625812739.png" mode="aspectFit" id="tryAgain" bind:tap="retry"></image>
+      <image src="https://oss.fxwljy.com/attach/file1721642867322.png" mode="aspectFit" id="next" bind:tap="nextStation"></image>
+    </image>
+    <view id="bottomTip">
+      <checkbox></checkbox>
+      <view>错词将自动加入错题本</view>
+    </view>
+  </view>
+
+</page-container>
