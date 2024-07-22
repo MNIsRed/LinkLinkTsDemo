@@ -1,6 +1,6 @@
 
 class CanvasDraw {
-  constructor(canvas: WechatMiniprogram.Canvas, ctx: WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D, canvasW: number, canvasH: number, canvasTop:number) {
+  constructor(canvas: WechatMiniprogram.Canvas, ctx: WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D, canvasW: number, canvasH: number, canvasTop: number) {
     this.canvas = canvas
     this.ctx = ctx
     this.canvasW = canvasW
@@ -38,10 +38,10 @@ class CanvasDraw {
         this.ctx.strokeStyle = currentPointLine.lineColor; // 设置线条颜色
       }
       if (currentStartPoint) {
-        this.ctx.moveTo(currentStartPoint.x, currentStartPoint.y); // 移动到上一个点
+        this.ctx.moveTo(currentStartPoint.x, currentStartPoint.y - this.canvasTop); // 移动到上一个点
       }
       if (currentEndPoint) {
-        this.ctx.lineTo(currentEndPoint.x, currentEndPoint.y); // 从上一个点画线到当前点
+        this.ctx.lineTo(currentEndPoint.x, currentEndPoint.y - this.canvasTop); // 从上一个点画线到当前点
       }
       this.ctx.lineWidth = 3 // 设置线条宽度
       this.ctx.stroke(); // 进   
@@ -56,12 +56,12 @@ class CanvasDraw {
       x: x,
       y: y
     }
-    console.log("--------", point)
     let linePoint = this.transformLinePointWithItemArea(point, itemArea)
     console.log("++++++", linePoint)
     if (!linePoint) {
       return
     }
+    console.log("=========", this.pointContainer)
     if (!this.pointContainer) {
       let pointLine: PointToLine = {
         startPoint: linePoint,
@@ -69,7 +69,6 @@ class CanvasDraw {
       }
       let pointLines: PointToLine[] = []
       pointLines.push(pointLine)
-      console.log(pointLines)
       this.pointContainer = {
         points: pointLines,
         currentPointLine: pointLine
@@ -83,34 +82,32 @@ class CanvasDraw {
       if (!value.startPoint) {
         return false
       }
+      console.log("=======查询是否有未连接的线", value)
       return true
-   })
-   console.log("=======点击连线完成",unFinishPointLineArr, this.pointContainer)
-   if (unFinishPointLineArr && unFinishPointLineArr.length > 0) {
-     console.log("=======点击连线完成",unFinishPointLineArr)
-     let pointLine = unFinishPointLineArr[0]
-     pointLine.endPoint = linePoint
-     pointLine.isFinishStroke = true
-     return
-   }
+    })
+    if (unFinishPointLineArr && unFinishPointLineArr.length > 0) {
+      console.log("=======点击连线完成", unFinishPointLineArr)
+      let pointLine = unFinishPointLineArr[0]
+      pointLine.endPoint = linePoint
+      pointLine.isFinishStroke = true
+      return
+    }
 
     let existPointToLine: PointToLine = {}
     this.pointContainer.points.forEach((pointToLine) => {
       if (pointToLine.startPoint && linePoint) {
-        if (pointToLine.startPoint.x === linePoint.x, pointToLine.startPoint.y === linePoint.y) {
+        if (pointToLine.startPoint.x === linePoint.x && pointToLine.startPoint.y === linePoint.y) {
           existPointToLine = pointToLine
           return
         }
       }
       if (pointToLine.endPoint && linePoint) {
-        if (pointToLine.endPoint.x === linePoint.x, pointToLine.endPoint.y === linePoint.y) {
+        if (pointToLine.endPoint.x === linePoint.x && pointToLine.endPoint.y === linePoint.y) {
           existPointToLine = pointToLine
         }
       }
     })
-    console.log(existPointToLine)
     if (!existPointToLine.startPoint) {
-      console.log(2222)
       let pointLine: PointToLine = {
         startPoint: linePoint,
         lineColor: lineColor
@@ -119,9 +116,8 @@ class CanvasDraw {
       this.pointContainer.currentPointLine = pointLine
       return
     }
-
     let tempPointLineArr = this.pointContainer.points.filter((value) => {
-      if (value === existPointToLine && value.isFinishStroke){
+      if (value === existPointToLine && value.isFinishStroke) {
         console.log("=======找到已完成连线的item,并剔除", value)
       }
       return !(value === existPointToLine && value.isFinishStroke)
@@ -147,6 +143,7 @@ class CanvasDraw {
       x: x,
       y: y
     }
+    this.pointContainer.currentPointLine.isTouchMoved = true
   }
 
   canvasTouchEnd() {
@@ -160,28 +157,25 @@ class CanvasDraw {
       if (!this.pointContainer) {
         return false
       }
-      return line !== this.pointContainer.currentPointLine
+      if (line !== this.pointContainer.currentPointLine) {
+        return true
+      }
+      return !line.isTouchMoved
     })
     this.pointContainer.points = tempLineArr
   }
 
   pointToLineFinish(firstArea: LinkItemArea, secondArea: LinkItemArea, lineColor: string) {
-    console.log("触发pointToLineFinish")
-    console.log(firstArea)
-    console.log(secondArea)
-    console.log(lineColor)
     if (!this.pointContainer) {
       return
     }
     let firstLinePoint = this.transformItemPointWithArea(firstArea)
     let secondLinePoint = this.transformItemPointWithArea(secondArea)
-    console.log("askljdaksjhdkas")
-    console.log(firstLinePoint)
     let existPointToLine: PointToLine = {}
-    console.log(this.pointContainer)
+
     this.pointContainer.points.forEach((pointToLine) => {
       if (pointToLine.startPoint && pointToLine.endPoint) {
-        if ((pointToLine.startPoint.x === firstLinePoint.x, pointToLine.startPoint.y === firstLinePoint.y) || (pointToLine.startPoint.x === secondLinePoint.x, pointToLine.startPoint.y === secondLinePoint.y)) {
+        if ((pointToLine.startPoint.x === firstLinePoint.x && pointToLine.startPoint.y === firstLinePoint.y) || (pointToLine.startPoint.x === secondLinePoint.x && pointToLine.startPoint.y === secondLinePoint.y)) {
           existPointToLine = pointToLine
           return
         }
@@ -189,31 +183,55 @@ class CanvasDraw {
     })
 
     if (existPointToLine.endPoint) {
-      let area = this.transformLinePointWithItemArea(existPointToLine.endPoint, firstArea)
-      console.log("XXXXX")
-      console.log(area)
-      if (area) {
+      let pointInFirstArea = this.transformLinePointWithItemArea(existPointToLine.endPoint, firstArea)
+      let pointInSecondArea = this.transformLinePointWithItemArea(existPointToLine.endPoint, secondArea)
+      console.log("======检测结束点",pointInFirstArea,pointInSecondArea, existPointToLine, firstArea, secondArea)
+      if (pointInFirstArea) {
         existPointToLine.endPoint = firstLinePoint
-      } else {
+      } else if (pointInSecondArea) {
         existPointToLine.endPoint = secondLinePoint
       }
     }
 
     if (existPointToLine.startPoint) {
-      let area = this.transformLinePointWithItemArea(existPointToLine.startPoint, firstArea)
-      console.log("YYYYY")
-      console.log(area)
-      if (area) {
+      let pointInFirstArea = this.transformLinePointWithItemArea(existPointToLine.startPoint, firstArea)
+      let pointInSecondArea = this.transformLinePointWithItemArea(existPointToLine.startPoint, secondArea)
+      console.log("======检测开始点",pointInFirstArea,pointInSecondArea, existPointToLine, firstArea, secondArea)
+      if (pointInFirstArea) {
         existPointToLine.startPoint = firstLinePoint
-      } else {
+      } else if (pointInSecondArea) {
         existPointToLine.startPoint = secondLinePoint
       }
     }
-
-    console.log("XZXXXXXXXXZZZZZZZ")
-    console.log(existPointToLine)
     existPointToLine.isFinishStroke = true
     existPointToLine.lineColor = lineColor
+    let resultPointToLines = this.pointContainer.points.filter((pointLine) => {
+      if (!existPointToLine.startPoint || !existPointToLine.endPoint) {
+        return true
+      }
+      if (pointLine === existPointToLine) {
+        return true
+      }
+      if (pointLine.startPoint) {
+        if (pointLine.startPoint.x === existPointToLine.startPoint.x && pointLine.startPoint.y === existPointToLine.startPoint.y) {
+          return false
+        }
+        if (pointLine.startPoint.x === existPointToLine.endPoint.x && pointLine.startPoint.y === existPointToLine.endPoint.y) {
+          return false
+        }
+      }
+
+      if (pointLine.endPoint) {
+        if (pointLine.endPoint.x === existPointToLine.startPoint.x && pointLine.endPoint.y === existPointToLine.startPoint.y) {
+          return false
+        }
+        if (pointLine.endPoint.x === existPointToLine.endPoint.x && pointLine.endPoint.y === existPointToLine.endPoint.y) {
+          return false
+        }
+      }
+      return true
+    })
+    this.pointContainer.points = resultPointToLines
   }
 
   transformLinePointWithItemArea(point: Point, itemArea: LinkItemArea): Point | undefined {

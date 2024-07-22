@@ -167,7 +167,7 @@ Page({
         let canvasH = (windowInfo.windowHeight - this.data.barHeight - this.data.canvasTopMargin)
         canvas.width = canvasW * dpr
         canvas.height = canvasH * dpr
-        let canvasTool = new CanvasDraw(canvas, ctx, canvasW, canvasH, res.top)
+        let canvasTool = new CanvasDraw(canvas, ctx, canvasW, canvasH, res[0].top)
         this.setData({
           canvasTool: canvasTool,
           canvasW: canvasW,

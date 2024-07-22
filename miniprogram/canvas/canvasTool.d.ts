@@ -14,7 +14,8 @@ interface PointToLine {
   startPoint?: Point,
   endPoint?: Point,
   isFinishStroke?: boolean,
-  lineColor?: string
+  lineColor?: string,
+  isTouchMoved?: boolean,
 }
 
 interface PointContainer {
