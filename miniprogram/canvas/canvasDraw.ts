@@ -86,13 +86,14 @@ class CanvasDraw {
       return true
     })
     if (unFinishPointLineArr && unFinishPointLineArr.length > 0) {
-      console.log("=======点击连线完成", unFinishPointLineArr)
+      // console.log("=======点击连线完成", unFinishPointLineArr)
       let pointLine = unFinishPointLineArr[0]
       if (pointLine.startPoint && pointLine.startPoint.x === linePoint.x) {
         return
       }
       pointLine.endPoint = linePoint
       pointLine.isFinishStroke = true
+      console.log("=======点击连线完成", pointLine)
       return
     }
 
@@ -142,6 +143,9 @@ class CanvasDraw {
     if (!this.pointContainer) {
       return
     }
+    if (!this.pointContainer.currentPointLine) {
+      return
+    }
     this.pointContainer.currentPointLine.endPoint = {
       x: x,
       y: y
@@ -154,7 +158,7 @@ class CanvasDraw {
       return
     }
     console.log("========看一下当前的线", this.pointContainer.currentPointLine)
-    if (this.pointContainer.currentPointLine.isFinishStroke) {
+    if (this.pointContainer.currentPointLine && this.pointContainer.currentPointLine.isFinishStroke) {
       return
     }
     let tempLineArr = this.pointContainer.points.filter((line) => {
@@ -236,7 +240,7 @@ class CanvasDraw {
       return true
     })
     this.pointContainer.points = resultPointToLines
-    this.pointContainer.currentPointLine = {}
+    this.pointContainer.currentPointLine = undefined
   }
 
   transformLinePointWithItemArea(point: Point, itemArea: LinkItemArea): Point | undefined {
@@ -274,7 +278,7 @@ cleanAllLine() {
      return
    }
    this.pointContainer.points = []
-   this.pointContainer.currentPointLine = {}
+   this.pointContainer.currentPointLine = undefined
 }
 }
 

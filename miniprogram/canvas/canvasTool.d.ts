@@ -20,5 +20,5 @@ interface PointToLine {
 
 interface PointContainer {
   points: PointToLine[],
-  currentPointLine: PointToLine
+  currentPointLine?: PointToLine
 }
