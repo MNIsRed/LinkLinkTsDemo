@@ -4,7 +4,7 @@ import { CanvasDraw } from "../../canvas/canvasDraw";
 
 import { WordDataInterface, Status, LinkAreaCoordinate, status2Color, WordBean, LinkResult } from '../../utils/linkCommon';
 import { Coordinate, find2DIndices, convertToPx } from '../../utils/util'
-import { allWords ,allWords2} from '../../utils/mock'
+import { allWords, allWords2 } from '../../utils/mock'
 import lottie from 'lottie-miniprogram'
 
 let currentWords = allWords
@@ -62,6 +62,7 @@ Page({
       })
       this.getWords();
       // this.addLevel();
+      this.data.canvasTool.cleanAllLine();
     }
   },
   touchBegin(event: WechatMiniprogram.Touch): TouchActionBean {
@@ -142,7 +143,11 @@ Page({
       (linkItem.getLinkedResult() as LinkResult[]).forEach((item) => {
         this.data.canvasTool.pointToLineFinish(app.globalData.area[0][item.wordIndex], app.globalData.area[1][item.meaningIndex], status2Color(item.correct ? Status.CORRECT : Status.WRONG));
       });
-      this.nextPage();
+
+      setTimeout(() => {
+        this.nextPage();
+      }, 2000)
+
     }
   },
   //
@@ -171,9 +176,13 @@ Page({
     let end = pageSize * (this.data.page + 1)
     if (pageSize * (this.data.page + 1) > currentWords.length) {
       end = currentWords.length
+    }
+    if (pageSize * this.data.page > currentWords.length) {
       stationFinished = true;
       this.showComplePop();
+      return;
     }
+
 
     this.setData({
       progressInfo: {
@@ -246,20 +255,25 @@ Page({
     })
   },
   retry() {
+    this.data.canvasTool.cleanAllLine();
     stationFinished = false;
     this.setData({
       page: 0,
-      completeShow:false
+      completeShow: false
     });
     this.getWords();
   },
   nextStation() {
+    this.data.canvasTool.cleanAllLine();
     stationFinished = false;
     currentWords = allWords2
     this.setData({
       page: 0,
-      completeShow:false
+      completeShow: false
     });
     this.getWords();
   },
+  onLoad(options){
+    
+  }
 })

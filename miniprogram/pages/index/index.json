@@ -4,5 +4,6 @@
     "top":"../../component/top/top",
     "animateProgressView":"../../component/animateProgressView/animateProgressView"
   },
-  "navigationStyle": "custom"
+  "navigationStyle": "custom",
+  "disableScroll": true
 }

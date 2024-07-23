@@ -37,7 +37,8 @@ export interface WordDataInterface {
   canvasTool: CanvasDraw,
   canvasW: number,
   canvasH: number,
-  dialogWidth:number
+  dialogWidth:number,
+  answerMode:boolean
 }
 
 // export interface LinkItemArea {

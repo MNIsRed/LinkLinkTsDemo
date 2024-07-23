@@ -39,9 +39,10 @@ Page({
 
   },
   goIndex(){
+
     console.log("触发 goIndex")
     wx.navigateTo({
-      url:'../index/index'
+      url:'../index/index?='
     })
   }
 })
