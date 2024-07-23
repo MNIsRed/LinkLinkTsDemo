@@ -279,10 +279,15 @@ Page({
     });
     this.getWords();
   },
+
   onLoad(options) {
     console.log("是答题模式", options.answerMode)
     this.setData({
       answerMode: options.answerMode == "true"
     })
+  },
+  
+  tipsAction() {
+
   }
 })
