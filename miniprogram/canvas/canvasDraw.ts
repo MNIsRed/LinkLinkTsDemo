@@ -153,6 +153,7 @@ class CanvasDraw {
     if (!this.pointContainer) {
       return
     }
+    console.log("========看一下当前的线", this.pointContainer.currentPointLine)
     if (this.pointContainer.currentPointLine.isFinishStroke) {
       return
     }
@@ -235,6 +236,7 @@ class CanvasDraw {
       return true
     })
     this.pointContainer.points = resultPointToLines
+    this.pointContainer.currentPointLine = {}
   }
 
   transformLinePointWithItemArea(point: Point, itemArea: LinkItemArea): Point | undefined {
