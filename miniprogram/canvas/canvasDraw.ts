@@ -14,7 +14,7 @@ class CanvasDraw {
   canvasH: number
   canvasTop: number
   animatedId?: number
-  pointContainer?: PointContainer
+  pointContainer ?: PointContainer|null
 
   loop() {
     this.render()
@@ -152,7 +152,7 @@ class CanvasDraw {
   }
 
   canvasTouchMove(e: WechatMiniprogram.Touch) {
-    console.log("=======touchMove走了", this.pointContainer?.currentPointLine)
+    console.log("=======touchMove走了", this.pointContainer!.currentPointLine)
     const x = e.touches[0].clientX
     const y = e.touches[0].clientY
     if (!this.pointContainer) {

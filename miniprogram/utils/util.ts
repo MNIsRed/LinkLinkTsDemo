@@ -97,3 +97,17 @@ export function convertToPx(rpx:number) {
 export function convertToRpx(px:number) {
   return px / (windowWidth / 750);
 }
+
+export interface DebounceTimer{
+  timer:null|number
+}
+
+export function debounce(func: (...args: any[]) => any,debounceTimer:DebounceTimer) {
+  if (debounceTimer.timer) {
+    return;
+  }
+  func();
+  debounceTimer.timer = setTimeout(() => {
+    debounceTimer.timer = null;
+  }, 500)
+}

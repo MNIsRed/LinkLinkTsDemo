@@ -113,6 +113,12 @@ Page({
     }
   },
   canvasTouchStart(e: any) {
+    if (e.touches.length > 1) {
+      // 如果检测到多指触控，你可以阻止默认行为
+      e.stopPropagation();
+      e.preventDefault();
+      return;
+    }
     console.log("开始点击", e)
     if (linkFinished) return;
     canMove = true;
@@ -132,7 +138,13 @@ Page({
   },
 
   canvasTouchMove(e: any) {
-    if (!canMove) return;
+    if (e.touches.length > 1) {
+      // 如果检测到多指触控，你可以阻止默认行为
+      e.stopPropagation();
+      e.preventDefault();
+      return;
+    }
+    if (!canMove || linkFinished) return;
     let touchAction = this.touchBegin(e as WechatMiniprogram.Touch, true);
     if (touchAction.area != null) {
       if (touchAction.linkFinished.from != null && touchAction.linkFinished.end != null) {
@@ -230,7 +242,10 @@ Page({
       },
       words: this.currentWords.slice(start, end) as WordBean[]
     });
-    this.initAreaData();
+    setTimeout(() => {
+      this.initAreaData();
+    }, 500);
+   
     linkFinished = false;
   },
   onReady() {
@@ -247,7 +262,7 @@ Page({
         let canvasH = (windowInfo.windowHeight - this.data.barHeight - this.data.canvasTopMargin)
         canvas.width = canvasW * dpr
         canvas.height = canvasH * dpr
-        let canvasTool = new CanvasDraw(canvas, ctx, canvasW, canvasH, res[0].top)
+        let canvasTool = new CanvasDraw(canvas, ctx, canvasW, canvasH, this.data.barHeight + this.data.canvasTopMargin)
         this.setData({
           canvasTool: canvasTool,
           canvasW: canvasW,
