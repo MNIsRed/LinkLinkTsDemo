@@ -123,7 +123,9 @@ Page({
         this.data.canvasTool.canvasTouchMove(e)
         this.data.canvasTool.pointToLineFinish(app.globalData.area[touchAction.linkFinished.from.row][touchAction.linkFinished.from.col], app.globalData.area[touchAction.linkFinished.end.row][touchAction.linkFinished.end.col], status2Color(Status.SELECTED));
         this.checkLinkFinished();
-      } else {
+      } else if(touchAction.linkFinished.from != null || touchAction.linkFinished.end != null) {
+        this.data.canvasTool.canvasTouchStart(e, touchAction.area, "#FCC434")
+      } else{
         this.data.canvasTool.canvasTouchMove(e)
       }
     } else {
@@ -286,7 +288,7 @@ Page({
       answerMode: options.answerMode == "true"
     })
   },
-  
+
   tipsAction() {
 
   }
