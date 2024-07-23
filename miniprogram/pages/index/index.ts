@@ -7,7 +7,6 @@ import { Coordinate, find2DIndices, convertToPx } from '../../utils/util'
 import { allWords, allWords2 } from '../../utils/mock'
 import lottie from 'lottie-miniprogram'
 
-let currentWords = allWords
 let app = getApp<IAppOption>()
 interface TouchActionBean {
   area: LinkItemArea | null,
@@ -34,6 +33,7 @@ Page({
   ctx: {
     tipCanvas: null as WechatMiniprogram.Canvas | null
   },
+  currentWords: allWords,
   //初始化区域数据
   initAreaData() {
     const linkItem = this.selectComponent("#linkItem")
@@ -65,7 +65,7 @@ Page({
       this.data.canvasTool.cleanAllLine();
     }
   },
-  touchBegin(event: WechatMiniprogram.Touch): TouchActionBean {
+  touchBegin(event: WechatMiniprogram.Touch, isMove: boolean): TouchActionBean {
     const x = event.changedTouches[0].clientX;
     const y = event.changedTouches[0].clientY;
 
@@ -83,7 +83,7 @@ Page({
       end: null
     }
     if (targetElement != null) {
-      linkAreaCoordinate = linkItem.startSelect(targetElement.row, targetElement.col);
+      linkAreaCoordinate = linkItem.startSelect(targetElement.row, targetElement.col, isMove);
       area = app.globalData.area[targetElement.row][targetElement.col];
     }
     // if (!hasFindItem) {
@@ -99,7 +99,7 @@ Page({
     console.log("开始点击", e)
     if (linkFinished) return;
     canMove = true;
-    let touchAction = this.touchBegin(e as WechatMiniprogram.Touch);
+    let touchAction = this.touchBegin(e as WechatMiniprogram.Touch, false);
     if (touchAction.area != null) {
       if (touchAction.linkFinished.from != null && touchAction.linkFinished.end != null) {
         this.data.canvasTool.canvasTouchStart(e, touchAction.area, status2Color(Status.SELECTED));
@@ -116,7 +116,7 @@ Page({
 
   canvasTouchMove(e: any) {
     if (!canMove) return;
-    let touchAction = this.touchBegin(e as WechatMiniprogram.Touch);
+    let touchAction = this.touchBegin(e as WechatMiniprogram.Touch, true);
     if (touchAction.area != null) {
       if (touchAction.linkFinished.from != null && touchAction.linkFinished.end != null) {
         canMove = false;
@@ -132,6 +132,7 @@ Page({
   },
 
   canvasTouchEnd(e: any) {
+    console.log("触发canvasTouchEnd")
     this.data.canvasTool.canvasTouchEnd()
   },
   checkLinkFinished() {
@@ -166,18 +167,24 @@ Page({
         })
       }
     })
-    this.setData({
-      completeShow: true
-    })
+
+    if (this.data.answerMode) {
+      this.setData({
+        completeShow: true
+      })
+    } else {
+      this.nextStation();
+    }
+
   },
   //获取当前页单词数据
   getWords() {
     let start = pageSize * this.data.page
     let end = pageSize * (this.data.page + 1)
-    if (pageSize * (this.data.page + 1) > currentWords.length) {
-      end = currentWords.length
+    if (pageSize * (this.data.page + 1) > this.currentWords.length) {
+      end = this.currentWords.length
     }
-    if (pageSize * this.data.page > currentWords.length) {
+    if (pageSize * this.data.page > this.currentWords.length) {
       stationFinished = true;
       this.showComplePop();
       return;
@@ -186,10 +193,10 @@ Page({
 
     this.setData({
       progressInfo: {
-        totalLevel: Math.floor(currentWords.length / pageSize) + (((currentWords.length % pageSize) == 0) ? 0 : 1),
+        totalLevel: Math.floor(this.currentWords.length / pageSize) + (((this.currentWords.length % pageSize) == 0) ? 0 : 1),
         currentLevel: this.data.page + 1
       },
-      words: currentWords.slice(start, end) as WordBean[]
+      words: this.currentWords.slice(start, end) as WordBean[]
     });
     this.initAreaData();
     linkFinished = false;
@@ -241,7 +248,6 @@ Page({
     }
   },
   onHide() {
-    this.ani.play();
   },
   onUnload() {
     console.log("动画结束", this.ani)
@@ -266,14 +272,17 @@ Page({
   nextStation() {
     this.data.canvasTool.cleanAllLine();
     stationFinished = false;
-    currentWords = allWords2
+    this.currentWords = allWords2
     this.setData({
       page: 0,
       completeShow: false
     });
     this.getWords();
   },
-  onLoad(options){
-    
+  onLoad(options) {
+    console.log("是答题模式", options.answerMode)
+    this.setData({
+      answerMode: options.answerMode == "true"
+    })
   }
 })
