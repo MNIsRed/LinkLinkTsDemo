@@ -273,7 +273,16 @@ Page({
     });
     this.getWords();
   },
+
+  tipsAction() {
+   
+  },
+
   onLoad(options){
     
   }
+
+
+
+
 })
