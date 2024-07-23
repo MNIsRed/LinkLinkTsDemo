@@ -35,7 +35,8 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    startSelect(index: number, position: number): LinkAreaCoordinate {
+    startSelect(index: number, position: number, isMove: boolean): LinkAreaCoordinate {
+      console.log("当前点击选中", this.data.status)
       var oldSelectedAreaIndex = -1;
       var oldSelectedPosition = -1;
       this.data.status.forEach((areaStatus, areaIndex) => {
@@ -124,8 +125,18 @@ Component({
             col: position
           }
         };
-      } else {
-        //虽然在选择中，但是选择了同侧数据？异常状况
+      } else if(!isMove){
+        //虽然在选择中，但是选择了同侧数据
+        //1.清除之前的选中
+        this.setData({
+          [`status[${oldSelectedAreaIndex}][${oldSelectedPosition}]`]: Status.UNSELECT,
+        });
+        //2.当前 item 已有选中的，清除两个 item 的选中状态
+
+        //3.选中当前的 item
+
+        //4.返回当前的 item
+        return this.startSelect(index, position,isMove)
       }
       return {
         from: null,
@@ -175,10 +186,9 @@ Component({
             })
           } else {
             //容错处理，
-            console.log("bbbbb")
             this.setData({
               [`status[${0}][${position}]`]: Status.UNSELECT,
-            })
+            });
           }
         }
       } else {
