@@ -75,6 +75,7 @@ class CanvasDraw {
       }
       return
     }
+    console.log("=======看下pointsTouchstart", this.pointContainer.points, this.pointContainer.points.length)
     let unFinishPointLineArr = this.pointContainer.points.filter((value) => {
       if (value.isFinishStroke) {
         return false
@@ -86,9 +87,9 @@ class CanvasDraw {
       return true
     })
     if (unFinishPointLineArr && unFinishPointLineArr.length > 0) {
-      // console.log("=======点击连线完成", unFinishPointLineArr)
       let pointLine = unFinishPointLineArr[0]
       if (pointLine.startPoint && pointLine.startPoint.x === linePoint.x) {
+        pointLine.startPoint = linePoint
         return
       }
       pointLine.endPoint = linePoint
@@ -138,6 +139,7 @@ class CanvasDraw {
 
 
   canvasTouchMove(e: WechatMiniprogram.Touch) {
+    console.log("=======touchMove走了", this.pointContainer?.currentPointLine)
     const x = e.touches[0].clientX
     const y = e.touches[0].clientY
     if (!this.pointContainer) {
@@ -157,7 +159,6 @@ class CanvasDraw {
     if (!this.pointContainer) {
       return
     }
-    console.log("========看一下当前的线", this.pointContainer.currentPointLine)
     if (this.pointContainer.currentPointLine && this.pointContainer.currentPointLine.isFinishStroke) {
       return
     }
@@ -165,12 +166,15 @@ class CanvasDraw {
       if (!this.pointContainer) {
         return false
       }
-      if (line !== this.pointContainer.currentPointLine) {
-        return true
+      if (line.isTouchMoved && !line.isFinishStroke) {
+        line.endPoint = undefined
       }
-      return !line.isTouchMoved
+      return true
     })
     this.pointContainer.points = tempLineArr
+    if (this.pointContainer.currentPointLine){
+      this.pointContainer.currentPointLine.endPoint = undefined
+    }
   }
 
   pointToLineFinish(firstArea: LinkItemArea, secondArea: LinkItemArea, lineColor: string) {
