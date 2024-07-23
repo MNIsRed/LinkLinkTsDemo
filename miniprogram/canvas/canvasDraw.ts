@@ -90,6 +90,7 @@ class CanvasDraw {
       let pointLine = unFinishPointLineArr[0]
       if (pointLine.startPoint && pointLine.startPoint.x === linePoint.x) {
         pointLine.startPoint = linePoint
+        this.removeExistPointToLine(linePoint, lineColor)
         return
       }
       pointLine.endPoint = linePoint
@@ -97,21 +98,28 @@ class CanvasDraw {
       console.log("=======点击连线完成", pointLine)
       return
     }
+    this.removeExistPointToLine(linePoint, lineColor)
+  }
 
+  removeExistPointToLine(linePoint: Point, lineColor: string) {
+    if (!this.pointContainer) {
+      return
+    }
     let existPointToLine: PointToLine = {}
     this.pointContainer.points.forEach((pointToLine) => {
       if (pointToLine.startPoint && linePoint) {
-        if (pointToLine.startPoint.x === linePoint.x && pointToLine.startPoint.y === linePoint.y) {
+        if (pointToLine.startPoint.x === linePoint.x && pointToLine.startPoint.y === linePoint.y && pointToLine.isFinishStroke) {
           existPointToLine = pointToLine
           return
         }
       }
       if (pointToLine.endPoint && linePoint) {
-        if (pointToLine.endPoint.x === linePoint.x && pointToLine.endPoint.y === linePoint.y) {
+        if (pointToLine.endPoint.x === linePoint.x && pointToLine.endPoint.y === linePoint.y && pointToLine.isFinishStroke) {
           existPointToLine = pointToLine
         }
       }
     })
+    console.log("=======找到已完成连线的item", linePoint,this.pointContainer.points,existPointToLine)
     if (!existPointToLine.startPoint) {
       let pointLine: PointToLine = {
         startPoint: linePoint,
@@ -122,10 +130,16 @@ class CanvasDraw {
       return
     }
     let tempPointLineArr = this.pointContainer.points.filter((value) => {
-      if (value === existPointToLine && value.isFinishStroke) {
+      if (!existPointToLine.startPoint) {
+        return true
+      }
+      if (!value.startPoint) {
+        return false
+      }
+      if (value.startPoint.x === existPointToLine.startPoint.x && value.startPoint.y === existPointToLine.startPoint.y && value.isFinishStroke) {
         console.log("=======找到已完成连线的item,并剔除", value)
       }
-      return !(value === existPointToLine && value.isFinishStroke)
+      return !(value.startPoint.x === existPointToLine.startPoint.x && value.startPoint.y === existPointToLine.startPoint.y && value.isFinishStroke)
     })
     this.pointContainer.points = tempPointLineArr
     let pointLine: PointToLine = {
@@ -136,7 +150,6 @@ class CanvasDraw {
     console.log("触发添加pointContainer")
     this.pointContainer.currentPointLine = pointLine
   }
-
 
   canvasTouchMove(e: WechatMiniprogram.Touch) {
     console.log("=======touchMove走了", this.pointContainer?.currentPointLine)
