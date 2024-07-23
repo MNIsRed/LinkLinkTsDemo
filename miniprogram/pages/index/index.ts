@@ -1,19 +1,23 @@
 // index.ts
-/// <reference path="../../miniprogram_npm/lottie-miniprogram/index.d.ts" />
 import { CanvasDraw } from "../../canvas/canvasDraw";
-
 import { WordDataInterface, Status, LinkAreaCoordinate, status2Color, WordBean, LinkResult } from '../../utils/linkCommon';
-import { Coordinate, find2DIndices, convertToPx } from '../../utils/util'
+import { find2DIndices, convertToPx } from '../../utils/util'
 import { allWords, allWords2 } from '../../utils/mock'
 import lottie from 'lottie-miniprogram'
 
+//把点击区域保存在 globalData 中方便不同方法调用
 let app = getApp<IAppOption>()
+
+//area：当前事件是否发生在单词/含义区域，linkFinished：当前事件是否导致连线完成
 interface TouchActionBean {
   area: LinkItemArea | null,
   linkFinished: LinkAreaCoordinate
 }
+//连线完成时，阻断后续touchMove监听
 var canMove = false;
+//三个单词连完，阻断touchStart 监听
 var linkFinished = false;
+//一页单词最大数量
 const pageSize = 3;
 //关卡完成
 var stationFinished = false;
@@ -29,10 +33,13 @@ Page({
     },
     completeShow: false,
   } as WordDataInterface,
+  // lottie 动画对象
   ani: null as any,
+  //tipCanvas 对象，尝试输出图像
   ctx: {
     tipCanvas: null as WechatMiniprogram.Canvas | null
   },
+  //当前的单词本
   currentWords: allWords,
   //初始化区域数据
   initAreaData() {
@@ -59,6 +66,16 @@ Page({
     if (!stationFinished) {
       this.setData({
         page: this.data.page + 1
+      })
+      this.getWords();
+      // this.addLevel();
+      this.data.canvasTool.cleanAllLine();
+    }
+  },
+  retryPage() {
+    if (!stationFinished) {
+      this.setData({
+        page: this.data.page
       })
       this.getWords();
       // this.addLevel();
@@ -143,13 +160,26 @@ Page({
 
     if (linkFinished) {
       // wx.showToast({ title: "连线完成" });
+      let allCorrect = true;
       (linkItem.getLinkedResult() as LinkResult[]).forEach((item) => {
         this.data.canvasTool.pointToLineFinish(app.globalData.area[0][item.wordIndex], app.globalData.area[1][item.meaningIndex], status2Color(item.correct ? Status.CORRECT : Status.WRONG));
+        if(!item.correct){
+          allCorrect = false;
+        }
       });
 
-      setTimeout(() => {
-        this.nextPage();
-      }, 2000)
+      if(allCorrect){
+        setTimeout(() => {
+          this.nextPage();
+        }, 500)
+        
+      }else{
+        setTimeout(() => {
+          this.retryPage();
+        }, 2000)
+        
+      }
+      
 
     }
   },
@@ -234,6 +264,7 @@ Page({
       const context = canvas.getContext('2d')
       lottie.setup(canvas)
       this.ani = lottie.loadAnimation({
+        // animationData:require('../../utils/data.json'),
         path: "https://oss.fxwljy.com/attach/file1721377474335.json",
         autoplay: true,
         loop: true,
