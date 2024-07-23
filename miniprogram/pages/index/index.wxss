@@ -7,3 +7,32 @@
   height: 500rpx;
   background: linear-gradient(#CFFFF1,#CFFFF100);
 }
+
+.center-message-bg {
+  margin-top: 50rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 48rpx;
+  margin-right: 48rpx;
+}
+
+.center-notify-bg {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+  width: 144rpx;
+  height: 62rpx;
+  background-color: #DCFCDE;
+  align-items: center;
+  border-radius: 31rpx;
+}
+
+.center-notify-text {
+  font-size: 24rpx;
+  font-weight: 350;
+  color: #0A7810;
+  position: absolute;
+  left: 68rpx;
+}

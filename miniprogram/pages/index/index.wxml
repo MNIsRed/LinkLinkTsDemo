@@ -3,7 +3,14 @@
   <top bind:tap="addLevel" style="flex-grow: 0;"></top>
 
   <animateProgressView style="flex-grow: 0;" progressInfo="{{progressInfo}}"></animateProgressView>
-  <canvas id="tipCanvas" type="2d" style="width: 100rpx;height: 50rpx;flex-grow: 0;"></canvas>
+  
+  <view class="center-message-bg">
+    <view class="center-notify-bg">
+      <canvas id="tipCanvas" type="2d" style="width: 90rpx;height: 45rpx; margin-bottom: 10rpx;"></canvas>
+      <text class="center-notify-text">提示</text>
+    </view>
+   
+  </view>
   <view style="display: flex;flex-grow: 1;align-items: center;flex-direction: row;">
     <linkItem id="linkItem" dataList="{{words}}" style="width: 100vh;"></linkItem>
 
