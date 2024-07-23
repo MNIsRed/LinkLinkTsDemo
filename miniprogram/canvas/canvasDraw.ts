@@ -152,7 +152,6 @@ class CanvasDraw {
   }
 
   canvasTouchMove(e: WechatMiniprogram.Touch) {
-    console.log("=======touchMove走了", this.pointContainer!.currentPointLine)
     const x = e.touches[0].clientX
     const y = e.touches[0].clientY
     if (!this.pointContainer) {
