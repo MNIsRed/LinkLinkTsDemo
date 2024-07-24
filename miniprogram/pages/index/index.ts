@@ -32,8 +32,7 @@ Page({
       currentLevel: 1
     },
     completeShow: false,
-    allCorrect: true,
-    totalTime: 0,
+    allCorrect: true
   } as WordDataInterface,
   // lottie 动画对象
   ani: null as any,
@@ -43,6 +42,7 @@ Page({
   },
   //当前的单词本
   currentWords: allWords,
+  stationStartTime: 0,
   //初始化区域数据
   initAreaData() {
     const linkItem = this.selectComponent("#linkItem")
@@ -217,7 +217,8 @@ Page({
 
     if (this.data.answerMode) {
       this.setData({
-        completeShow: true
+        completeShow: true,
+        stationCompleteTime: Math.floor((Date.now() - this.stationStartTime) / 1000)
       })
     } else {
       this.nextStation();
@@ -293,6 +294,7 @@ Page({
         },
       })
     }).exec()
+    this.stationStartTime = Date.now();
   },
   onShow() {
     if (this.ani) {
@@ -316,6 +318,7 @@ Page({
   retry() {
     this.data.canvasTool.cleanAllLine();
     stationFinished = false;
+    this.stationStartTime = Date.now();
     this.setData({
       page: 0,
       completeShow: false,
@@ -326,6 +329,7 @@ Page({
   nextStation() {
     this.data.canvasTool.cleanAllLine();
     stationFinished = false;
+    this.stationStartTime = Date.now();
     this.currentWords = allWords2
     this.setData({
       page: 0,

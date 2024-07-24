@@ -51,7 +51,7 @@
     </image>
 
     <view style="left: 50%;top: 50%;transform: translate(-50%,40rpx);" class="dialogImage">
-      共用时 <span>{{totalTime}}</span> 秒，真棒!
+      共用时 <span>{{stationCompleteTime}}</span> 秒，真棒!
     </view>
 
     <view class="dialogImage nextButton" style="left: 50%;top: 50%;transform: translate(-50%,145rpx);" bind:tap="nextStation">
