@@ -31,7 +31,9 @@ Page({
       totalLevel: 9,
       currentLevel: 1
     },
-    completeShow: false,
+    completeShow: true,
+    allCorrect:true,
+    totalTime:0,
   } as WordDataInterface,
   // lottie 动画对象
   ani: null as any,
@@ -75,7 +77,8 @@ Page({
   retryPage() {
     if (!stationFinished) {
       this.setData({
-        page: this.data.page
+        page: this.data.page,
+        allCorrect:false
       })
       this.getWords();
       // this.addLevel();
@@ -152,9 +155,9 @@ Page({
         this.data.canvasTool.canvasTouchMove(e)
         this.data.canvasTool.pointToLineFinish(app.globalData.area[touchAction.linkFinished.from.row][touchAction.linkFinished.from.col], app.globalData.area[touchAction.linkFinished.end.row][touchAction.linkFinished.end.col], status2Color(Status.SELECTED));
         this.checkLinkFinished();
-      } else if(touchAction.linkFinished.from != null || touchAction.linkFinished.end != null) {
+      } else if (touchAction.linkFinished.from != null || touchAction.linkFinished.end != null) {
         this.data.canvasTool.canvasTouchStart(e, touchAction.area, "#FCC434")
-      } else{
+      } else {
         this.data.canvasTool.canvasTouchMove(e)
       }
     } else {
@@ -175,23 +178,23 @@ Page({
       let allCorrect = true;
       (linkItem.getLinkedResult() as LinkResult[]).forEach((item) => {
         this.data.canvasTool.pointToLineFinish(app.globalData.area[0][item.wordIndex], app.globalData.area[1][item.meaningIndex], status2Color(item.correct ? Status.CORRECT : Status.WRONG));
-        if(!item.correct){
+        if (!item.correct) {
           allCorrect = false;
         }
       });
 
-      if(allCorrect){
+      if (allCorrect) {
         setTimeout(() => {
           this.nextPage();
         }, 500)
-        
-      }else{
+
+      } else {
         setTimeout(() => {
           this.retryPage();
         }, 2000)
-        
+
       }
-      
+
 
     }
   },
@@ -238,14 +241,15 @@ Page({
     this.setData({
       progressInfo: {
         totalLevel: Math.floor(this.currentWords.length / pageSize) + (((this.currentWords.length % pageSize) == 0) ? 0 : 1),
-        currentLevel: this.data.page + 1
+        currentLevel: this.data.page + 1,
+        isDisableAnimate: this.data.page == 0
       },
       words: this.currentWords.slice(start, end) as WordBean[]
     });
     setTimeout(() => {
       this.initAreaData();
-    }, 500);
-   
+    }, 100);
+
     linkFinished = false;
   },
   onReady() {
@@ -313,7 +317,8 @@ Page({
     stationFinished = false;
     this.setData({
       page: 0,
-      completeShow: false
+      completeShow: false,
+      allCorrect:true
     });
     this.getWords();
   },
@@ -323,7 +328,8 @@ Page({
     this.currentWords = allWords2
     this.setData({
       page: 0,
-      completeShow: false
+      completeShow: false,
+      allCorrect:true
     });
     this.getWords();
   },

@@ -106,3 +106,37 @@
   font-weight: 400;
   font-size: 28rpx !important;
 }
+
+.dialogRoot{
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.dialogBackground{
+  position: absolute;
+  z-index: 1003;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dialogImage{
+  position: absolute;
+  z-index: 1004;
+}
+
+span{
+  color: #F97800;
+}
+
+.nextButton{
+  background-color: #37C23E;
+  border-radius: 68rpx;
+  width: 450rpx;
+  height: 120rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
