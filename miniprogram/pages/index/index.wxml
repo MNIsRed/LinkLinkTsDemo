@@ -20,10 +20,10 @@
     </view>
   </view>
 
-  <view style="display: flex;flex-grow: 1;align-items: center;flex-direction: row;">
+  <view style="display: flex;flex-grow: 1;align-items: center;flex-direction: row; z-index: 1000;" bind:touchstart="canvasTouchStart" bind:touchmove="canvasTouchMove" bind:touchend="canvasTouchEnd" bind:touchcancel="canvasTouchEnd">
     <linkItem id="linkItem" dataList="{{words}}" style="width: 100vw;"></linkItem>
   </view>
-  <canvas id="myCanvas" type="2d" style="top: {{barHeight+canvasTopMargin+'px'}};left: 0;position: absolute; width:{{canvasW}}px; height:{{canvasH}}px;" bind:touchstart="canvasTouchStart" bind:touchmove="canvasTouchMove" bind:touchend="canvasTouchEnd" hidden="{{completeShow}}" bind:touchcancel="canvasTouchEnd">
+  <canvas id="myCanvas" type="2d" style="top: {{barHeight+canvasTopMargin+'px'}};left: 0;position: absolute; width:{{canvasW}}px; height:{{canvasH}}px;" >
   </canvas>
 </view>
 

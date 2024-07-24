@@ -10,7 +10,8 @@
   font-size: 32rpx;
   /* 元素的总宽度和总高度（包括边框和内边距）将等于width和height的值 */
   box-sizing: border-box;
-  color: #0A0D0F
+  color: #0A0D0F;
+  background-color: white;
 }
 
 .word {
