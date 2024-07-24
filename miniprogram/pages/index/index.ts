@@ -152,9 +152,9 @@ Page({
         this.data.canvasTool.canvasTouchMove(e)
         this.data.canvasTool.pointToLineFinish(app.globalData.area[touchAction.linkFinished.from.row][touchAction.linkFinished.from.col], app.globalData.area[touchAction.linkFinished.end.row][touchAction.linkFinished.end.col], status2Color(Status.SELECTED));
         this.checkLinkFinished();
-      } else if(touchAction.linkFinished.from != null || touchAction.linkFinished.end != null) {
+      } else if (touchAction.linkFinished.from != null || touchAction.linkFinished.end != null) {
         this.data.canvasTool.canvasTouchStart(e, touchAction.area, "#FCC434")
-      } else{
+      } else {
         this.data.canvasTool.canvasTouchMove(e)
       }
     } else {
@@ -175,23 +175,23 @@ Page({
       let allCorrect = true;
       (linkItem.getLinkedResult() as LinkResult[]).forEach((item) => {
         this.data.canvasTool.pointToLineFinish(app.globalData.area[0][item.wordIndex], app.globalData.area[1][item.meaningIndex], status2Color(item.correct ? Status.CORRECT : Status.WRONG));
-        if(!item.correct){
+        if (!item.correct) {
           allCorrect = false;
         }
       });
 
-      if(allCorrect){
+      if (allCorrect) {
         setTimeout(() => {
           this.nextPage();
         }, 500)
-        
-      }else{
+
+      } else {
         setTimeout(() => {
           this.retryPage();
         }, 2000)
-        
+
       }
-      
+
 
     }
   },
@@ -238,14 +238,15 @@ Page({
     this.setData({
       progressInfo: {
         totalLevel: Math.floor(this.currentWords.length / pageSize) + (((this.currentWords.length % pageSize) == 0) ? 0 : 1),
-        currentLevel: this.data.page + 1
+        currentLevel: this.data.page + 1,
+        isDisableAnimate: this.data.page == 0
       },
       words: this.currentWords.slice(start, end) as WordBean[]
     });
     setTimeout(() => {
       this.initAreaData();
-    }, 500);
-   
+    }, 100);
+
     linkFinished = false;
   },
   onReady() {
