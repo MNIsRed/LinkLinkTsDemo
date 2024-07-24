@@ -1,7 +1,6 @@
 <!--index.wxml-->
 <view style="height: 100vh;display: flex;flex-direction: column;">
   <top style="flex-grow: 0;"></top>
-
   <animateProgressView style="flex-grow: 0;" progressInfo="{{progressInfo}}"></animateProgressView>
 
   <view class="center-message-bg" hidden="{{completeShow}}" bind:tap="tipsAction">
@@ -9,6 +8,15 @@
       <canvas id="tipCanvas" type="2d" style="width: 90rpx;height: 45rpx; margin-bottom: 10rpx;" hidden="{{true}}"></canvas>
       <image src="https://oss.fxwljy.com/attach/file1721719438827.gif" style="width: 45rpx;height: 45rpx; margin-bottom: 10rpx;margin-left: 5rpx;"></image>
       <text class="center-notify-text">提示</text>
+    </view>
+    <view class="center-right-items-bg">
+    <view class="center-audio-btn">
+      <text class="iconfont icon-shengyin"></text>
+    </view>
+    <view class="center-time-bg">
+      <text class="iconfont icon-miaobiao "></text>
+      <van-count-down time="{{ 120000 }}" format="ss"/>
+    </view>
     </view>
   </view>
 

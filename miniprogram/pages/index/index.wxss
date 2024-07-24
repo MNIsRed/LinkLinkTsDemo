@@ -71,3 +71,38 @@
   position: absolute;
   left: 68rpx;
 }
+
+.center-right-items-bg {
+  display: flex;
+  flex-direction: row;
+}
+
+.center-audio-btn {
+  width: 62rpx;
+  height: 62rpx;
+  background-color: #E4F9F4;
+  border-radius: 31rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-time-bg {
+  width: 89rpx;
+  height: 62rpx;
+  background-color: #E4F9F4;
+  border-radius: 31rpx;
+  margin-left: 32rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28rpx;
+}
+
+.center-time-bg .van-count-down {
+  color: #0A0D0F !important;
+  font-weight: 400;
+  font-size: 28rpx !important;
+}
