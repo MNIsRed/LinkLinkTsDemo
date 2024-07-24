@@ -14,7 +14,7 @@ class CanvasDraw {
   canvasH: number
   canvasTop: number
   animatedId?: number
-  pointContainer?: PointContainer
+  pointContainer ?: PointContainer|null
 
   loop() {
     this.render()
