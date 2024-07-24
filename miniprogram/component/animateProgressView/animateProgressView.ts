@@ -12,6 +12,7 @@ interface ProgressComponentData {
   progressInnerLineWidth: number
   progressLeveTexWidth: number
   ipLogoTargetX: number
+  ipLogoRunTargetX: number
   componentWidth: number
   currentLevel: number
   totalLevel: number
@@ -22,7 +23,7 @@ interface ProgressComponentData {
   originTranslateX: number
 }
 
-const minAnimateDuration = 300
+const minAnimateDuration = 1560
 
 Component({
 
@@ -71,6 +72,7 @@ Component({
   methods: {
 
     resetLogoLocation() {
+      console.log("=========走了吗")
       let currentLevel = this.properties.progressInfo.currentLevel as number
       let newTranslateX = currentLevel * this.data.minLevelWidth
       this.setData({
@@ -102,35 +104,22 @@ Component({
         originTranslateX: newTranslateX,
         currentLevel: currentLevel,
       })
-      this.animate('#animate-logo-standup', [
-        { translateY: 10 },
-        { translateY: 35, ease: 'ease-out' },
-      ], 100, () => {
-        this.clearAnimation('#animate-logo-standup', function () { })
-        this.animateJumpLogo()
-        this.setData({
-          isJumpLogoHidden: false
-        })
+      this.animateJumpLogo()
+      this.setData({
+        isJumpLogoHidden: false
       })
       this.animateProgressLine()
     },
     animateJumpLogo() {
       this.animate('#animate-logo', [
-        { translateX: 0, rotateZ: 0, ease: 'linear' },
-        { translateX: this.data.currentNeedTranslateX * 0.5, rotateZ: 90, ease: 'linear' },
-        { translateX: this.data.currentNeedTranslateX, rotateZ: 180, ease: 'linear' }
+        { translateX: 0, ease: 'linear' },
+        // { translateX: this.data.currentNeedTranslateX * 0.5, ease: 'ease-in-out' },
+        { translateX: this.data.currentNeedTranslateX, ease: 'ease-in-out' }
       ], this.data.currentAnimateDuration, () => {
         this.clearAnimation('#animate-logo', function () { })
         this.setData({
           isJumpLogoHidden: true
         })
-      })
-      this.animate('#animate-log-bg', [
-        { translateY: 35 },
-        { translateY: -30, ease: 'cubic-bezier(.24,.33,.65,.91)' },
-        { translateY: 30, ease: 'cubic-bezier(.45,.08,.97,.57)' },
-      ], this.data.currentAnimateDuration, () => {
-        this.clearAnimation('#animate-log-bg', function () { })
         this.standupLogoAppearAnimate()
       })
     },
@@ -158,21 +147,20 @@ Component({
 
     standupLogoAppearAnimate() {
       this.setData({
-        ipLogoTargetX: this.parseIpLogoTargetX()
+        ipLogoTargetX: this.parseIpLogoTargetX(),
+        ipLogoRunTargetX: this.parseIpLogoRunTargetX()
       })
-      this.animate('#animate-logo-standup', [
-        { translateY: 35 },
-        { translateY: 10, ease: 'linear' },
-      ], 100, () => {
-        this.clearAnimation('#animate-logo-standup', function () { })
-        this.setData({
-          isJumpLogoHidden: true
-        })
+      this.setData({
+        isJumpLogoHidden: true
       })
     },
 
     parseIpLogoTargetX() {
-      return this.data.currentLevel * this.data.minLevelWidth - 44 * this.data.rpxToPx - 20 * this.data.rpxToPx
+      return this.data.currentLevel * this.data.minLevelWidth - 80 * this.data.rpxToPx 
+    },
+
+    parseIpLogoRunTargetX() {
+      return this.data.currentLevel * this.data.minLevelWidth - 200 * this.data.rpxToPx + 11.5 * this.data.rpxToPx
     }
 
   },
@@ -202,12 +190,12 @@ Component({
           });
           let ipLogoX = this.parseIpLogoTargetX()
           this.setData({
-            ipLogoTargetX: ipLogoX
+            ipLogoTargetX: ipLogoX,
+            ipLogoRunTargetX: this.parseIpLogoRunTargetX()
           })
         } else {
           console.error('获取组件尺寸失败');
         }
       });
   }
-
 })
