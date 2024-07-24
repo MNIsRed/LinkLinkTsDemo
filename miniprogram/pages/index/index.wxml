@@ -10,13 +10,13 @@
       <text class="center-notify-text">提示</text>
     </view>
     <view class="center-right-items-bg">
-    <view class="center-audio-btn">
-      <text class="iconfont icon-shengyin"></text>
-    </view>
-    <view class="center-time-bg">
-      <text class="iconfont icon-miaobiao "></text>
-      <van-count-down time="{{ 120000 }}" format="ss"/>
-    </view>
+      <view class="center-audio-btn">
+        <text class="iconfont icon-shengyin"></text>
+      </view>
+      <view class="center-time-bg">
+        <text class="iconfont icon-miaobiao "></text>
+        <van-count-down time="{{ 120000 }}" format="ss" />
+      </view>
     </view>
   </view>
 
@@ -28,9 +28,8 @@
 </view>
 
 <page-container custom-style="background-color:transparent;" position="center" show="{{completeShow}}" overlay style="width: 100vw;height: 100vh;" z-index="1000">
-  <view style="position: relative;width: 100%;height: 100%;">
-
-    <image src="https://oss.fxwljy.com/attach/file1721625738588.png" mode="aspectFit" style="position: absolute;width: {{dialogWidth+'px'}};height: {{1.06*dialogWidth+'px'}};z-index: 1003;top: 50%;left: 50%;transform: translate(-50%, -50%);">
+  <view wx:if="{{!allCorrect}}" class="dialogRoot">
+    <image src="https://oss.fxwljy.com/attach/file1721625738588.png" mode="aspectFit" style="width: {{dialogWidth+'px'}};height: {{1.06*dialogWidth+'px'}};" class="dialogBackground">
 
       <image src="https://oss.fxwljy.com/attach/file1721625812739.png" mode="aspectFit" id="tryAgain" bind:tap="retry"></image>
       <image src="https://oss.fxwljy.com/attach/file1721642867322.png" mode="aspectFit" id="next" bind:tap="nextStation"></image>
@@ -41,4 +40,23 @@
     </view>
   </view>
 
+
+  <view wx:else class="dialogRoot">
+
+    <image src="https://oss.fxwljy.com/attach/file1721808364852.png" mode="aspectFit" style="width: {{dialogWidth+'px'}};height: {{1.078*dialogWidth+'px'}};" class="dialogBackground">
+    </image>
+    <image src="https://oss.fxwljy.com/attach/file1721808374627.png" style="width: 30rpx;height: 26rpx;right: 0;top: 50%;transform: translate(-{{50}}rpx,-{{0.1*dialogWidth}}px);" class="dialogImage">
+    </image>
+    <image src="https://oss.fxwljy.com/attach/file1721808370350.png" style="width: 57rpx;height: 34rpx;left: 0;top: 50%;transform: translate({{40}}rpx,-{{0.13*dialogWidth}}px);" class="dialogImage">
+    </image>
+
+    <view style="left: 50%;top: 50%;transform: translate(-50%,40rpx);" class="dialogImage">
+      共用时 <span>{{totalTime}}</span> 秒，真棒!
+    </view>
+
+    <view class="dialogImage nextButton" style="left: 50%;top: 50%;transform: translate(-50%,145rpx);" bind:tap="nextStation">
+      <view style="color: white;font-size: 36rpx;">下一关</view>
+      <view class="iconfont icon-xiayiguan" style="margin-left: 14rpx;"></view>
+    </view>
+  </view>
 </page-container>

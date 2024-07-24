@@ -38,7 +38,9 @@ export interface WordDataInterface {
   canvasW: number,
   canvasH: number,
   dialogWidth:number,
-  answerMode:boolean
+  answerMode:boolean,
+  allCorrect:boolean,
+  totalTime:number
 }
 
 // export interface LinkItemArea {

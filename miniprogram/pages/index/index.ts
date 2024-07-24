@@ -31,7 +31,9 @@ Page({
       totalLevel: 9,
       currentLevel: 1
     },
-    completeShow: false,
+    completeShow: true,
+    allCorrect:true,
+    totalTime:0,
   } as WordDataInterface,
   // lottie 动画对象
   ani: null as any,
@@ -75,7 +77,8 @@ Page({
   retryPage() {
     if (!stationFinished) {
       this.setData({
-        page: this.data.page
+        page: this.data.page,
+        allCorrect:false
       })
       this.getWords();
       // this.addLevel();
@@ -314,7 +317,8 @@ Page({
     stationFinished = false;
     this.setData({
       page: 0,
-      completeShow: false
+      completeShow: false,
+      allCorrect:true
     });
     this.getWords();
   },
@@ -324,7 +328,8 @@ Page({
     this.currentWords = allWords2
     this.setData({
       page: 0,
-      completeShow: false
+      completeShow: false,
+      allCorrect:true
     });
     this.getWords();
   },
