@@ -40,7 +40,7 @@ export interface WordDataInterface {
   dialogWidth:number,
   answerMode:boolean,
   allCorrect:boolean,
-  totalTime:number
+  totalTime:number,
 }
 
 // export interface LinkItemArea {

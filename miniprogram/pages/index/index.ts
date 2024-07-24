@@ -31,9 +31,9 @@ Page({
       totalLevel: 9,
       currentLevel: 1
     },
-    completeShow: true,
-    allCorrect:true,
-    totalTime:0,
+    completeShow: false,
+    allCorrect: true,
+    totalTime: 0,
   } as WordDataInterface,
   // lottie 动画对象
   ani: null as any,
@@ -78,7 +78,7 @@ Page({
     if (!stationFinished) {
       this.setData({
         page: this.data.page,
-        allCorrect:false
+        allCorrect: false
       })
       this.getWords();
       // this.addLevel();
@@ -237,10 +237,11 @@ Page({
       return;
     }
 
-
+    let totalPage = Math.floor(this.currentWords.length / pageSize) + (((this.currentWords.length % pageSize) == 0) ? 0 : 1);
+    console.log("当前总页数", totalPage)
     this.setData({
       progressInfo: {
-        totalLevel: Math.floor(this.currentWords.length / pageSize) + (((this.currentWords.length % pageSize) == 0) ? 0 : 1),
+        totalLevel: totalPage,
         currentLevel: this.data.page + 1,
         isDisableAnimate: this.data.page == 0
       },
@@ -318,7 +319,7 @@ Page({
     this.setData({
       page: 0,
       completeShow: false,
-      allCorrect:true
+      allCorrect: true
     });
     this.getWords();
   },
@@ -329,7 +330,7 @@ Page({
     this.setData({
       page: 0,
       completeShow: false,
-      allCorrect:true
+      allCorrect: true
     });
     this.getWords();
   },
