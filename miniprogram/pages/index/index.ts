@@ -43,6 +43,9 @@ Page({
   //当前的单词本
   currentWords: allWords,
   stationStartTime: 0,
+  backgroundMusicAudio: wx.createInnerAudioContext(),
+  backgroundStart: false,
+  stopBackground: false,
   //初始化区域数据
   initAreaData() {
     const linkItem = this.selectComponent("#linkItem")
@@ -105,6 +108,7 @@ Page({
     if (targetElement != null) {
       linkAreaCoordinate = linkItem.startSelect(targetElement.row, targetElement.col, isMove);
       area = app.globalData.area[targetElement.row][targetElement.col];
+      this.playMusic();
     }
     // if (!hasFindItem) {
     //   linkItem.cancelLink();
@@ -301,12 +305,21 @@ Page({
       console.log("动画启动", this.ani)
       this.ani.play();
     }
+    if (!this.backgroundStart && !this.stopBackground) {
+      this.playBackground();
+      console.log("重新播放")
+    } else {
+      console.log("没有重新播放")
+    }
   },
   onHide() {
+
   },
   onUnload() {
     console.log("动画结束", this.ani)
     this.ani.destroy()
+    console.log("停止播放")
+    this.backgroundMusicAudio.stop();
   },
   addLevel() {
     let newProgress = this.data.progressInfo
@@ -348,5 +361,50 @@ Page({
 
   tipsAction() {
 
-  }
+  },
+  stopOrStartBackground() {
+    console.log("222222")
+    this.stopBackground = !this.stopBackground;
+    if (this.stopBackground) {
+      console.log("停止播放")
+      this.backgroundMusicAudio.pause();
+    } else {
+      this.playBackground();
+    }
+  },
+  playBackground() {
+    console.log("重新开始")
+    this.backgroundMusicAudio.stop();
+    // this.backgroundMusicAudio.autoplay = true
+    this.backgroundMusicAudio.loop = true
+    this.backgroundMusicAudio.src = 'https://oss.fxwljy.com/attach/file1720682520578.mp3'
+    this.backgroundMusicAudio.onError((res) => {
+      console.log(res.errMsg)
+      console.log(res.errCode)
+    })
+    this.backgroundStart = true
+    //通过onAudioInterruptionBegin监听音频中断开始
+    wx.onAudioInterruptionBegin((res) => {
+      this.backgroundStart = false
+    })
+    this.backgroundMusicAudio.play()
+  },
+  playMusic() {
+    // const innerAudioContext = wx.createInnerAudioContext()
+    // innerAudioContext.autoplay = true
+    // innerAudioContext.src = '/pages/music/s26wp-2ae6p.mp3'
+    // innerAudioContext.onPlay(() => {
+    //   console.log('开始播放')
+    // })
+    // innerAudioContext.onError((res) => {
+    //   console.log(res.errMsg)
+    //   console.log(res.errCode)
+    // })
+    this.vibrateShort();
+  },
+  vibrateShort() {
+    wx.vibrateShort({
+      type: 'light',
+    })
+  },
 })

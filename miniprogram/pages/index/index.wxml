@@ -3,13 +3,13 @@
   <top style="flex-grow: 0;"></top>
   <animateProgressView style="flex-grow: 0;" progressInfo="{{progressInfo}}"></animateProgressView>
 
-  <view class="center-message-bg" hidden="{{completeShow}}" bind:tap="tipsAction">
-    <view class="center-notify-bg">
+  <view class="center-message-bg">
+    <view class="center-notify-bg" bind:tap="tipsAction">
       <canvas id="tipCanvas" type="2d" style="width: 90rpx;height: 45rpx; margin-bottom: 10rpx;" hidden="{{true}}"></canvas>
       <image src="https://oss.fxwljy.com/attach/file1721719438827.gif" style="width: 45rpx;height: 45rpx; margin-bottom: 10rpx;margin-left: 5rpx;"></image>
       <text class="center-notify-text">提示</text>
     </view>
-    <view class="center-right-items-bg">
+    <view class="center-right-items-bg" catch:tap="stopOrStartBackground">
       <view class="center-audio-btn">
         <text class="iconfont icon-shengyin"></text>
       </view>
