@@ -2,7 +2,8 @@
   "usingComponents": {
     "linkItem": "../../component/linkItem/linkItem",
     "top":"../../component/top/top",
-    "animateProgressView":"../../component/animateProgressView/animateProgressView"
+    "animateProgressView":"../../component/animateProgressView/animateProgressView",
+    "van-count-down": "@vant/weapp/count-down/index"
   },
   "navigationStyle": "custom",
   "disableScroll": true
