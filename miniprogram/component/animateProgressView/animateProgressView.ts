@@ -74,8 +74,10 @@ Component({
     resetLogoLocation() {
       console.log("=========走了吗")
       let currentLevel = this.properties.progressInfo.currentLevel as number
-      let newTranslateX = currentLevel * this.data.minLevelWidth
+      let minLevelWidth = this.data.componentWidth / (this.properties.progressInfo.totalLevel) as number
+      let newTranslateX = currentLevel * minLevelWidth
       this.setData({
+        minLevelWidth: minLevelWidth,
         currentLevel: currentLevel,
         originTranslateX: newTranslateX,
         progressInnerLineWidth: newTranslateX,
@@ -84,7 +86,8 @@ Component({
       });
       let ipLogoX = this.parseIpLogoTargetX()
       this.setData({
-        ipLogoTargetX: ipLogoX
+        ipLogoTargetX: ipLogoX,
+        ipLogoRunTargetX: this.parseIpLogoRunTargetX()
       })
     },
 
