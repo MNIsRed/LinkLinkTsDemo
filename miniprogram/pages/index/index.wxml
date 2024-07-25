@@ -5,7 +5,6 @@
 
   <view class="center-message-bg">
     <view class="center-notify-bg" bind:tap="tipsAction">
-      <canvas id="tipCanvas" type="2d" style="width: 90rpx;height: 45rpx; margin-bottom: 10rpx;" hidden="{{true}}"></canvas>
       <image src="https://oss.fxwljy.com/attach/file1721719438827.gif" style="width: 45rpx;height: 45rpx; margin-bottom: 10rpx;margin-left: 5rpx;"></image>
       <text class="center-notify-text">提示</text>
     </view>
@@ -19,8 +18,10 @@
       </view>
     </view>
   </view>
-
-  <view style="display: flex;flex-grow: 1;align-items: center;flex-direction: row; z-index: 1000;" bind:touchstart="canvasTouchStart" bind:touchmove="canvasTouchMove" bind:touchend="canvasTouchEnd" bind:touchcancel="canvasTouchEnd">
+  <view class="success-flowers" style="position: absolute; top: {{flowerCanvasBgTop}}px; left: {{flowerCanvasBgLeft}}px; z-index: 1002;">
+    <canvas id="tipCanvas" type="2d" style="width: {{flowerCanvasW}}px; height: {{flowerCanvasH}}px; margin-bottom: 10rpx;"></canvas>
+  </view>
+  <view style="display: flex;flex-grow: 1;align-items: center;flex-direction: row; z-index: 1005;" bind:touchstart="canvasTouchStart" bind:touchmove="canvasTouchMove" bind:touchend="canvasTouchEnd" bind:touchcancel="canvasTouchEnd">
     <linkItem id="linkItem" dataList="{{words}}" style="width: 100vw;"></linkItem>
   </view>
   <canvas id="myCanvas" type="2d" style="top: {{barHeight+canvasTopMargin+'px'}};left: 0;position: absolute; width:{{canvasW}}px; height:{{canvasH}}px;" >

@@ -44,6 +44,7 @@ class CanvasDraw {
         this.ctx.lineTo(currentEndPoint.x, currentEndPoint.y - this.canvasTop); // 从上一个点画线到当前点
       }
       this.ctx.lineWidth = 3 // 设置线条宽度
+      this.ctx.lineCap = 'round'
       this.ctx.stroke(); // 进   
     }
   }
@@ -263,12 +264,12 @@ class CanvasDraw {
     if (point.x >= itemArea.left && point.x <= itemArea.right && point.y >= itemArea.top && point.y <= itemArea.bottom) {
       if (point.x > this.canvasW * 0.5) {
         return {
-          x: itemArea.left,
+          x: itemArea.left + (itemArea.right - itemArea.left) * 0.5,
           y: itemArea.top + (itemArea.bottom - itemArea.top) * 0.5
         }
       }
       return {
-        x: itemArea.right,
+        x: itemArea.right - (itemArea.right - itemArea.left) * 0.5,
         y: itemArea.top + (itemArea.bottom - itemArea.top) * 0.5
       }
     }
@@ -278,12 +279,12 @@ class CanvasDraw {
   transformItemPointWithArea(itemArea: LinkItemArea): Point {
     if (itemArea.left > this.canvasW * 0.5) {
       return {
-        x: itemArea.left,
+        x: itemArea.left + (itemArea.right - itemArea.left) * 0.5,
         y: itemArea.top + (itemArea.bottom - itemArea.top) * 0.5
       }
     }
     return {
-      x: itemArea.right,
+      x: itemArea.right - (itemArea.right - itemArea.left) * 0.5,
       y: itemArea.top + (itemArea.bottom - itemArea.top) * 0.5
     }
   }

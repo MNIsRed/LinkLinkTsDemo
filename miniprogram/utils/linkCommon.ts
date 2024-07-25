@@ -41,6 +41,10 @@ export interface WordDataInterface {
   answerMode:boolean,
   allCorrect:boolean,
   stationCompleteTime:number,
+  flowerCanvasW: number,
+  flowerCanvasH: number,
+  flowerCanvasBgLeft:number,
+  flowerCanvasBgTop:number,
 }
 
 // export interface LinkItemArea {

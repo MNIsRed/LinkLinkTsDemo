@@ -285,14 +285,24 @@ Page({
 
     this.createSelectorQuery().select('#tipCanvas').node(res => {
       this.ctx.tipCanvas = res.node as WechatMiniprogram.Canvas
+      let windowInfo = wx.getWindowInfo()
+      const dpr = windowInfo.pixelRatio
       const canvas = res.node
+      let canvasW = (windowInfo.windowWidth) * 2
+      let canvasH = canvasW * 155 / 412
+      canvas.width = dpr * canvasW
+      canvas.height = dpr * canvasH
+      this.setData({
+        flowerCanvasW: canvasW,
+        flowerCanvasH: canvasH,
+        flowerCanvasBgLeft: (canvasW - windowInfo.windowWidth) * -0.5
+      })
       const context = canvas.getContext('2d')
       lottie.setup(canvas)
       this.ani = lottie.loadAnimation({
-        // animationData:require('../../utils/data.json'),
-        path: "https://oss.fxwljy.com/attach/file1721377474335.json",
-        autoplay: true,
-        loop: true,
+        animationData:require('../../lottieJson/success-flowers.js'),
+        autoplay: false,
+        loop: false,
         rendererSettings: {
           context,
         },
@@ -303,7 +313,7 @@ Page({
   onShow() {
     if (this.ani) {
       console.log("动画启动", this.ani)
-      this.ani.play();
+      // this.ani.play();
     }
     if (!this.backgroundStart && !this.stopBackground) {
       this.playBackground();
@@ -359,8 +369,13 @@ Page({
     })
   },
 
-  tipsAction() {
+  successFlowers() {
+    console.log("=======执行撒花动画")
+    this.ani.goToAndPlay(0);
+  },
 
+  tipsAction() {
+    
   },
   stopOrStartBackground() {
     console.log("222222")
