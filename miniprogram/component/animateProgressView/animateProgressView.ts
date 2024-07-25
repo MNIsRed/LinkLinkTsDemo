@@ -130,7 +130,7 @@ Component({
       let widthChange = this.data.currentLevel * this.data.minLevelWidth
       this.animate('.inner-progress-bg', [
         { width: this.data.progressInnerLineWidth + 'px' },
-        { width: widthChange + 'px', ease: 'ease-out' },
+        { width: widthChange + 'px', ease: 'ease-in-out' },
       ], this.data.currentAnimateDuration, () => {
         this.clearAnimation('.inner-progress-bg', function () { })
         this.setData({
@@ -139,7 +139,7 @@ Component({
       })
       this.animate('.progress-level-text-bg', [
         { width: this.data.progressLeveTexWidth + 'px' },
-        { width: widthChange + 'px', ease: 'ease-out' },
+        { width: widthChange + 'px', ease: 'ease-in-out' },
       ], this.data.currentAnimateDuration, () => {
         this.clearAnimation('.progress-level-text-bg', function () { })
         this.setData({
