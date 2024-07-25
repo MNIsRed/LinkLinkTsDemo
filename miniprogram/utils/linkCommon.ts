@@ -45,6 +45,7 @@ export interface WordDataInterface {
   flowerCanvasH: number,
   flowerCanvasBgLeft:number,
   flowerCanvasBgTop:number,
+  flowerCanvasHidden: boolean
 }
 
 // export interface LinkItemArea {

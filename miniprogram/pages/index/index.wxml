@@ -18,7 +18,7 @@
       </view>
     </view>
   </view>
-  <view class="success-flowers" style="position: absolute; top: {{flowerCanvasBgTop}}px; left: {{flowerCanvasBgLeft}}px; z-index: 1002;">
+  <view class="success-flowers" style="position: absolute; top: {{flowerCanvasBgTop}}px; left: {{flowerCanvasBgLeft}}px; z-index: 1008;" hidden="{{flowerCanvasHidden}}">
     <canvas id="tipCanvas" type="2d" style="width: {{flowerCanvasW}}px; height: {{flowerCanvasH}}px; margin-bottom: 10rpx;"></canvas>
   </view>
   <view style="display: flex;flex-grow: 1;align-items: center;flex-direction: row; z-index: 1005;" bind:touchstart="canvasTouchStart" bind:touchmove="canvasTouchMove" bind:touchend="canvasTouchEnd" bind:touchcancel="canvasTouchEnd">

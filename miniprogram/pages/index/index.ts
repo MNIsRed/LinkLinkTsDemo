@@ -32,7 +32,8 @@ Page({
       currentLevel: 1
     },
     completeShow: false,
-    allCorrect: true
+    allCorrect: true,
+    flowerCanvasHidden: true
   } as WordDataInterface,
   // lottie 动画对象
   ani: null as any,
@@ -307,6 +308,12 @@ Page({
           context,
         },
       })
+      this.ani.addEventListener("complete", () => {
+          console.log("当前动画执行完毕")
+          this.setData({
+            flowerCanvasHidden: true
+          })
+      })
     }).exec()
     this.stationStartTime = Date.now();
   },
@@ -371,11 +378,14 @@ Page({
 
   successFlowers() {
     console.log("=======执行撒花动画")
+    this.setData({
+      flowerCanvasHidden: false
+    })
     this.ani.goToAndPlay(0);
   },
 
   tipsAction() {
-    
+    this.successFlowers()
   },
   stopOrStartBackground() {
     console.log("222222")
