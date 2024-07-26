@@ -274,14 +274,16 @@ Page({
       let windowInfo = wx.getWindowInfo()
       const dpr = windowInfo.pixelRatio
       const canvas = res.node
-      let canvasW = (windowInfo.windowWidth) * 2
+      let canvasW = (windowInfo.windowWidth) * 5
       let canvasH = canvasW * 155 / 412
       canvas.width = dpr * canvasW
       canvas.height = dpr * canvasH
       this.setData({
         flowerCanvasW: canvasW,
         flowerCanvasH: canvasH,
-        flowerCanvasBgLeft: (canvasW - windowInfo.windowWidth) * -0.5
+        flowerCanvasBgLeft: (canvasW - windowInfo.windowWidth) * -0.5,
+        flowerCanvasBgTop: -250
+        
       })
       const context = canvas.getContext('2d')
       lottie.setup(canvas)
@@ -365,6 +367,7 @@ Page({
     this.setData({
       dialogShowMode: 3
     })
+    this.successFlowers()
   },
   successFlowers() {
     console.log("=======执行撒花动画")
