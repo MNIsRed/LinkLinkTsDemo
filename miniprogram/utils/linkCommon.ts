@@ -1,5 +1,5 @@
 import { CanvasDraw } from "../canvas/canvasDraw";
-import {Coordinate} from "../utils/util"
+import { Coordinate } from "../utils/util"
 
 export interface LinkResult {
   wordIndex: number,
@@ -7,9 +7,9 @@ export interface LinkResult {
   correct: Boolean
 }
 
-export interface LinkAreaCoordinate{
-  from:Coordinate|null,
-  end:Coordinate|null
+export interface LinkAreaCoordinate {
+  from: Coordinate | null,
+  end: Coordinate | null
 }
 
 export interface WordBean {
@@ -28,19 +28,22 @@ export enum Status {
 
 export interface WordDataInterface {
   words: Array<WordBean>,
-  page:number,
-  barHeight:number,
-  completeShow:boolean,
-  tipTempPath:string,
+  page: number,
+  barHeight: number,
+  // 弹窗模式
+  // 0不展示，1 全部正确弹窗 2 错题询问弹窗 3 瞄一眼弹窗
+  dialogShowMode: number,
+  tipTempPath: string,
   progressInfo: ProgressInfo,
-  canvasTopMargin:number,
+  canvasTopMargin: number,
   canvasTool: CanvasDraw,
   canvasW: number,
   canvasH: number,
-  dialogWidth:number,
-  answerMode:boolean,
-  allCorrect:boolean,
-  stationCompleteTime:number,
+  dialogWidth: number,
+  answerMode: boolean,
+  stationCompleteTime: number,
+  tipWordWidth:number,
+  tipWordHeight:number
 }
 
 // export interface LinkItemArea {

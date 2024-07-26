@@ -53,7 +53,9 @@ Component({
 
         this.setData({
           [`status[${index}][${position}]`]: Status.ONSELECT
-        })
+        });
+        this.playMusic();
+
         return {
           from: {
             row: index,
@@ -107,6 +109,7 @@ Component({
             linkedData: newLinkedMap,
             linkedResult: newLinkedResult
           })
+          this.playMusic();
         } else {
           this.setData({
             [`status[${oldSelectedAreaIndex}][${oldSelectedPosition}]`]: Status.SELECTED,
@@ -114,6 +117,7 @@ Component({
             linkedData: newLinkedMap,
             linkedResult: newLinkedResult
           })
+          this.playMusic();
         }
         return {
           from: {
@@ -235,7 +239,25 @@ Component({
     },
     getLinkedResult(): LinkResult[] {
       return this.data.linkedResult
-    }
+    },
+    playMusic() {
+      // const innerAudioContext = wx.createInnerAudioContext()
+      // innerAudioContext.autoplay = true
+      // innerAudioContext.src = '/pages/music/s26wp-2ae6p.mp3'
+      // innerAudioContext.onPlay(() => {
+      //   console.log('开始播放')
+      // })
+      // innerAudioContext.onError((res) => {
+      //   console.log(res.errMsg)
+      //   console.log(res.errCode)
+      // })
+      this.vibrateShort();
+    },
+    vibrateShort() {
+      wx.vibrateShort({
+        type: 'light',
+      })
+    },
   },
   lifetimes: {
     ready: function () {

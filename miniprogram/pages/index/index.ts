@@ -31,21 +31,18 @@ Page({
       totalLevel: 9,
       currentLevel: 1
     },
-    completeShow: false,
-    allCorrect: true
+    dialogShowMode: 0,
+    words: [] as WordBean[],
   } as WordDataInterface,
   // lottie 动画对象
   ani: null as any,
-  //tipCanvas 对象，尝试输出图像
-  ctx: {
-    tipCanvas: null as WechatMiniprogram.Canvas | null
-  },
   //当前的单词本
   currentWords: allWords,
   stationStartTime: 0,
   backgroundMusicAudio: wx.createInnerAudioContext(),
   backgroundStart: false,
   stopBackground: false,
+  currentStationAllCorrect: true,
   //初始化区域数据
   initAreaData() {
     const linkItem = this.selectComponent("#linkItem")
@@ -79,9 +76,9 @@ Page({
   },
   retryPage() {
     if (!stationFinished) {
+      this.currentStationAllCorrect = false;
       this.setData({
         page: this.data.page,
-        allCorrect: false
       })
       this.getWords();
       // this.addLevel();
@@ -108,7 +105,6 @@ Page({
     if (targetElement != null) {
       linkAreaCoordinate = linkItem.startSelect(targetElement.row, targetElement.col, isMove);
       area = app.globalData.area[targetElement.row][targetElement.col];
-      this.playMusic();
     }
     // if (!hasFindItem) {
     //   linkItem.cancelLink();
@@ -191,12 +187,10 @@ Page({
         setTimeout(() => {
           this.nextPage();
         }, 500)
-
       } else {
         setTimeout(() => {
           this.retryPage();
         }, 2000)
-
       }
 
 
@@ -204,24 +198,9 @@ Page({
   },
   //
   showComplePop() {
-    if (this.ctx.tipCanvas) {
-      console.log("tipCanvas", this.ctx.tipCanvas)
-      const dataUrl = this.ctx.tipCanvas.toDataURL("image/png", 0.92);
-      console.log("dataUrl", dataUrl)
-    }
-
-    wx.canvasToTempFilePath({
-      canvas: this.selectComponent('#tipCanvas'),
-      success: (res) => {
-        this.setData({
-          tipTempPath: res.tempFilePath
-        })
-      }
-    })
-
     if (this.data.answerMode) {
       this.setData({
-        completeShow: true,
+        dialogShowMode: this.currentStationAllCorrect ? 1 : 2,
         stationCompleteTime: Math.floor((Date.now() - this.stationStartTime) / 1000)
       })
     } else {
@@ -273,18 +252,20 @@ Page({
         canvas.width = canvasW * dpr
         canvas.height = canvasH * dpr
         let canvasTool = new CanvasDraw(canvas, ctx, canvasW, canvasH, this.data.barHeight + this.data.canvasTopMargin)
+        let dialogWidth = windowInfo.windowWidth - convertToPx(120);
         this.setData({
           canvasTool: canvasTool,
           canvasW: canvasW,
           canvasH: canvasH,
-          dialogWidth: windowInfo.windowWidth - convertToPx(120)
+          dialogWidth: dialogWidth,
+          tipWordWidth: windowInfo.windowWidth - convertToPx(200),
+          tipWordHeight: Math.floor(dialogWidth * 0.19)
         })
         ctx.scale(dpr, dpr)
       })
     this.getWords();
 
     this.createSelectorQuery().select('#tipCanvas').node(res => {
-      this.ctx.tipCanvas = res.node as WechatMiniprogram.Canvas
       const canvas = res.node
       const context = canvas.getContext('2d')
       lottie.setup(canvas)
@@ -299,6 +280,7 @@ Page({
       })
     }).exec()
     this.stationStartTime = Date.now();
+    this.stopBackground = wx.getStorageSync("stopBackground")
   },
   onShow() {
     if (this.ani) {
@@ -332,10 +314,10 @@ Page({
     this.data.canvasTool.cleanAllLine();
     stationFinished = false;
     this.stationStartTime = Date.now();
+    this.currentStationAllCorrect = true;
     this.setData({
       page: 0,
-      completeShow: false,
-      allCorrect: true
+      dialogShowMode: 0
     });
     this.getWords();
   },
@@ -344,27 +326,35 @@ Page({
     stationFinished = false;
     this.stationStartTime = Date.now();
     this.currentWords = allWords2
+    this.currentStationAllCorrect = true;
     this.setData({
       page: 0,
-      completeShow: false,
-      allCorrect: true
+      dialogShowMode: 0
     });
     this.getWords();
   },
 
   onLoad(options) {
-    console.log("是答题模式", options.answerMode)
     this.setData({
       answerMode: options.answerMode == "true"
     })
   },
 
   tipsAction() {
-
+    this.setData({
+      dialogShowMode: 3
+    })
   },
   stopOrStartBackground() {
     console.log("222222")
     this.stopBackground = !this.stopBackground;
+    wx.setStorage({
+      key: "stopBackground",
+      data: this.stopBackground,
+      success() {
+        console.log("保存背景音乐播放状态成功")
+      }
+    })
     if (this.stopBackground) {
       console.log("停止播放")
       this.backgroundMusicAudio.pause();
@@ -389,22 +379,17 @@ Page({
     })
     this.backgroundMusicAudio.play()
   },
-  playMusic() {
-    // const innerAudioContext = wx.createInnerAudioContext()
-    // innerAudioContext.autoplay = true
-    // innerAudioContext.src = '/pages/music/s26wp-2ae6p.mp3'
-    // innerAudioContext.onPlay(() => {
-    //   console.log('开始播放')
-    // })
-    // innerAudioContext.onError((res) => {
-    //   console.log(res.errMsg)
-    //   console.log(res.errCode)
-    // })
-    this.vibrateShort();
-  },
-  vibrateShort() {
-    wx.vibrateShort({
-      type: 'light',
+  onDialogDismiss() {
+    this.setData({
+      dialogShowMode: 0
     })
   },
+  onClickOverlay() {
+    console.log("clickOverlay", this.data.dialogShowMode)
+    if (this.data.dialogShowMode == 3) {
+      this.setData({
+        dialogShowMode: 0
+      })
+    }
+  }
 })

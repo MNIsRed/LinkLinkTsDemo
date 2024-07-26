@@ -45,7 +45,6 @@ Page({
   goIndex(e: WechatMiniprogram.TouchEvent) {
     debounce(() => {
       let dataset = e.currentTarget.dataset;
-      console.log("触发 goIndex")
       wx.navigateTo({
         url: '../index/index?answerMode=' + (dataset.mode == "answer")
       })

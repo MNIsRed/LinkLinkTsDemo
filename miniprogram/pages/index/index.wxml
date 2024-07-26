@@ -1,4 +1,49 @@
 <!--index.wxml-->
+<wxs module="pageWxs">
+  var dialogShow = function (argument) {
+    return argument > 0
+  }
+
+  var getId = function (index) {
+    switch (index) {
+      case 0:
+        return "first"
+        break;
+      case 1:
+        return "second"
+        break;
+      default:
+        return "third"
+        break;
+    }
+  }
+
+  var checkMarquee = function(e) {
+    var query = wx.createSelectorQuery().in(this);
+    query.select('#marqueeContainer').boundingClientRect();
+    query.select('#marqueeText').boundingClientRect();
+    query.exec(function (res) {
+      var containerWidth = res[0].width;
+      var textWidth = res[1].width;
+      
+      if (textWidth > containerWidth) {
+        this.setData({
+          shouldShowMarquee: true
+        });
+      } else {
+        this.setData({
+          shouldShowMarquee: false
+        });
+      }
+    });
+  }
+
+  module.exports = {
+    dialogShow: dialogShow,
+    getId: getId
+  }
+</wxs>
+
 <view style="height: 100vh;display: flex;flex-direction: column;">
   <top style="flex-grow: 0;"></top>
   <animateProgressView style="flex-grow: 0;" progressInfo="{{progressInfo}}"></animateProgressView>
@@ -9,7 +54,7 @@
       <image src="https://oss.fxwljy.com/attach/file1721719438827.gif" style="width: 45rpx;height: 45rpx; margin-bottom: 10rpx;margin-left: 5rpx;"></image>
       <text class="center-notify-text">提示</text>
     </view>
-    <view class="center-right-items-bg" catch:tap="stopOrStartBackground">
+    <view class="center-right-items-bg" catch:tap="stopOrStartBackground" style="z-index: 1000;">
       <view class="center-audio-btn">
         <text class="iconfont icon-shengyin"></text>
       </view>
@@ -23,12 +68,12 @@
   <view style="display: flex;flex-grow: 1;align-items: center;flex-direction: row; z-index: 1000;" bind:touchstart="canvasTouchStart" bind:touchmove="canvasTouchMove" bind:touchend="canvasTouchEnd" bind:touchcancel="canvasTouchEnd">
     <linkItem id="linkItem" dataList="{{words}}" style="width: 100vw;"></linkItem>
   </view>
-  <canvas id="myCanvas" type="2d" style="top: {{barHeight+canvasTopMargin+'px'}};left: 0;position: absolute; width:{{canvasW}}px; height:{{canvasH}}px;" >
+  <canvas id="myCanvas" type="2d" style="top: {{barHeight+canvasTopMargin+'px'}};left: 0;position: absolute; width:{{canvasW}}px; height:{{canvasH}}px;">
   </canvas>
 </view>
 
-<page-container custom-style="background-color:transparent;" position="center" show="{{completeShow}}" overlay style="width: 100vw;height: 100vh;" z-index="1000">
-  <view wx:if="{{!allCorrect}}" class="dialogRoot">
+<page-container custom-style="background-color:transparent;" position="center" show="{{pageWxs.dialogShow(dialogShowMode)}}" overlay style="width: 100vw;height: 100vh;" z-index="1000" bind:afterleave="onDialogDismiss" bind:clickoverlay="onClickOverlay">
+  <view wx:if="{{dialogShowMode == 2}}" class="dialogRoot">
     <image src="https://oss.fxwljy.com/attach/file1721625738588.png" mode="aspectFit" style="width: {{dialogWidth+'px'}};height: {{1.06*dialogWidth+'px'}};" class="dialogBackground">
 
       <image src="https://oss.fxwljy.com/attach/file1721625812739.png" mode="aspectFit" id="tryAgain" bind:tap="retry"></image>
@@ -41,22 +86,35 @@
   </view>
 
 
-  <view wx:else class="dialogRoot">
+  <view wx:if="{{dialogShowMode == 1}}" class="dialogRoot">
 
     <image src="https://oss.fxwljy.com/attach/file1721808364852.png" mode="aspectFit" style="width: {{dialogWidth+'px'}};height: {{1.078*dialogWidth+'px'}};" class="dialogBackground">
     </image>
-    <image src="https://oss.fxwljy.com/attach/file1721808374627.png" style="width: 30rpx;height: 26rpx;right: 0;top: 50%;transform: translate(-{{50}}rpx,-{{0.1*dialogWidth}}px);" class="dialogImage">
+    <image src="https://oss.fxwljy.com/attach/file1721808374627.png" style="width: 30rpx;height: 26rpx;right: 0;top: 50%;transform: translate(-{{50}}rpx,-{{0.1*dialogWidth}}px);" class="dialogWidget">
     </image>
-    <image src="https://oss.fxwljy.com/attach/file1721808370350.png" style="width: 57rpx;height: 34rpx;left: 0;top: 50%;transform: translate({{40}}rpx,-{{0.13*dialogWidth}}px);" class="dialogImage">
+    <image src="https://oss.fxwljy.com/attach/file1721808370350.png" style="width: 57rpx;height: 34rpx;left: 0;top: 50%;transform: translate({{40}}rpx,-{{0.13*dialogWidth}}px);" class="dialogWidget">
     </image>
 
-    <view style="left: 50%;top: 50%;transform: translate(-50%,40rpx);" class="dialogImage">
+    <view style="left: 50%;top: 50%;transform: translate(-50%,40rpx);" class="dialogWidget">
       共用时 <span>{{stationCompleteTime}}</span> 秒，真棒!
     </view>
 
-    <view class="dialogImage nextButton" style="left: 50%;top: 50%;transform: translate(-50%,145rpx);" bind:tap="nextStation">
+    <view class="dialogWidget nextButton" style="left: 50%;top: 50%;transform: translate(-50%,145rpx);" bind:tap="nextStation">
       <view style="color: white;font-size: 36rpx;">下一关</view>
       <view class="iconfont icon-xiayiguan" style="margin-left: 14rpx;"></view>
     </view>
+  </view>
+
+  <view wx:if="{{dialogShowMode == 3}}" class="dialogRoot">
+    <view class="dialogBackground" style="align-items: center;display: flex;flex-direction: column;">
+      <image src="https://oss.fxwljy.com/attach/file1721877120853.png" style="height: {{1.316*dialogWidth}}px;" class="tipBackground" mode="aspectFit">
+        <view class="dialogWidget tipWordRoot {{pageWxs.getId(index)}}" wx:for="{{words}}">
+          <span>{{item.word}} {{item.meaning}}
+          </span>
+        </view>
+      </image>
+      <view class="iconfont icon-guanbi-zidingyidanchuang" style="margin-top: 40rpx;line-height: 76rpx;font-size: 76rpx;" bind:tap="onClickOverlay"></view>
+    </view>
+
   </view>
 </page-container>

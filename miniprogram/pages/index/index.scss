@@ -1,13 +1,32 @@
 /**index.wxss**/
-.gradientBackground{
+@use 'sass:math';
+
+//通用弹窗宽度
+$dialogWidth : calc(100vw - 120rpx);
+// 瞄一眼吧图片高度
+$tipWordImageHeight : calc(#{$dialogWidth}*1.316);
+// 瞄一眼吧弹窗高度
+$tipWordDialogHeight : calc(#{$tipWordImageHeight} + 116rpx);
+// 瞄一眼吧单词宽度
+$tipWordWidth : calc(100vw - 200rpx);
+// 瞄一眼吧单词高度
+$tipWordHeight: calc(#{$dialogWidth} * 0.19);
+// 瞄一眼吧第一个单词y轴位移
+$tipFirstTransform1 : calc(#{$tipWordDialogHeight}/2 * -1 + #{$tipWordImageHeight}*0.272);
+// 瞄一眼吧第二个单词y轴位移
+$tipFirstTransform2 : calc(#{$tipWordDialogHeight}/2 * -1 + #{$tipWordImageHeight}*0.452);
+// 瞄一眼吧第三个单词y轴位移
+$tipFirstTransform3 : calc(#{$tipWordDialogHeight}/2 * -1 + #{$tipWordImageHeight}*0.633);
+
+.gradientBackground {
   position: absolute;
   top: 0;
   width: 100%;
   height: 500rpx;
-  background: linear-gradient(#CFFFF1,#CFFFF100);
+  background: linear-gradient(#CFFFF1, #CFFFF100);
 }
 
-#tryAgain{
+#tryAgain {
   width: 206rpx;
   height: 206rpx;
   z-index: 1009;
@@ -17,7 +36,7 @@
   transform: translate(-30rpx, -30rpx);
 }
 
-#next{
+#next {
   width: 206rpx;
   height: 206rpx;
   z-index: 1009;
@@ -27,7 +46,7 @@
   transform: translate(30rpx, -30rpx);
 }
 
-#bottomTip{
+#bottomTip {
   z-index: 1009;
   position: absolute;
   top: 50%;
@@ -39,7 +58,7 @@
   align-items: center;
 }
 
-#linkItem{
+#linkItem {
   margin-bottom: 200rpx;
 }
 
@@ -107,13 +126,13 @@
   font-size: 28rpx !important;
 }
 
-.dialogRoot{
+.dialogRoot {
   position: relative;
   width: 100%;
   height: 100%;
 }
 
-.dialogBackground{
+.dialogBackground {
   position: absolute;
   z-index: 1003;
   top: 50%;
@@ -121,16 +140,16 @@
   transform: translate(-50%, -50%);
 }
 
-.dialogImage{
+.dialogWidget {
   position: absolute;
   z-index: 1004;
 }
 
-span{
+.dialogWidget span {
   color: #F97800;
 }
 
-.nextButton{
+.nextButton {
   background-color: #37C23E;
   border-radius: 68rpx;
   width: 450rpx;
@@ -139,4 +158,48 @@ span{
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.tipBackground {
+  width: $dialogWidth;
+}
+
+.tipWordRoot {
+  width: $tipWordWidth;
+  height: $tipWordHeight;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  padding-left: 30rpx;
+  padding-right: 30rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tipWordRoot span {
+  color: #0A0D0F;
+  display: inline-block; /* 保持文本在同一行 */
+}
+
+.marquee-animate {
+  animation: marquee 10s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+.tipWordRoot.first {
+  transform: translate(-50%, $tipFirstTransform1);
+}
+
+.tipWordRoot.second {
+  transform: translate(-50%, $tipFirstTransform2);
+}
+
+.tipWordRoot.third {
+  transform: translate(-50%, $tipFirstTransform3);
 }
