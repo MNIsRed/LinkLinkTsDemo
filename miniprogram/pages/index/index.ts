@@ -33,6 +33,7 @@ Page({
     },
     dialogShowMode: 0,
     words: [] as WordBean[],
+    flowerCanvasHidden: true,
   } as WordDataInterface,
   // lottie 动画对象
   ani: null as any,
@@ -266,17 +267,33 @@ Page({
     this.getWords();
 
     this.createSelectorQuery().select('#tipCanvas').node(res => {
+      let windowInfo = wx.getWindowInfo()
+      const dpr = windowInfo.pixelRatio
       const canvas = res.node
+      let canvasW = (windowInfo.windowWidth) * 2
+      let canvasH = canvasW * 155 / 412
+      canvas.width = dpr * canvasW
+      canvas.height = dpr * canvasH
+      this.setData({
+        flowerCanvasW: canvasW,
+        flowerCanvasH: canvasH,
+        flowerCanvasBgLeft: (canvasW - windowInfo.windowWidth) * -0.5
+      })
       const context = canvas.getContext('2d')
       lottie.setup(canvas)
       this.ani = lottie.loadAnimation({
-        // animationData:require('../../utils/data.json'),
-        path: "https://oss.fxwljy.com/attach/file1721377474335.json",
-        autoplay: true,
-        loop: true,
+        animationData:require('../../lottieJson/success-flowers.js'),
+        autoplay: false,
+        loop: false,
         rendererSettings: {
           context,
         },
+      })
+      this.ani.addEventListener("complete", () => {
+          console.log("当前动画执行完毕")
+          this.setData({
+            flowerCanvasHidden: true
+          })
       })
     }).exec()
     this.stationStartTime = Date.now();
@@ -285,7 +302,7 @@ Page({
   onShow() {
     if (this.ani) {
       console.log("动画启动", this.ani)
-      this.ani.play();
+      // this.ani.play();
     }
     if (!this.backgroundStart && !this.stopBackground) {
       this.playBackground();
@@ -341,9 +358,17 @@ Page({
   },
 
   tipsAction() {
+    this.successFlowers()
     this.setData({
       dialogShowMode: 3
     })
+  },
+  successFlowers() {
+    console.log("=======执行撒花动画")
+    this.setData({
+      flowerCanvasHidden: false
+    })
+    this.ani.goToAndPlay(0);
   },
   stopOrStartBackground() {
     console.log("222222")

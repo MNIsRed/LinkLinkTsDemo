@@ -69,6 +69,7 @@ $tipFirstTransform3 : calc(#{$tipWordDialogHeight}/2 * -1 + #{$tipWordImageHeigh
   justify-content: space-between;
   margin-left: 48rpx;
   margin-right: 48rpx;
+  z-index: 1006;
 }
 
 .center-notify-bg {

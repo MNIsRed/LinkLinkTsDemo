@@ -44,6 +44,11 @@ export interface WordDataInterface {
   stationCompleteTime: number,
   tipWordWidth:number,
   tipWordHeight:number
+  flowerCanvasW: number,
+  flowerCanvasH: number,
+  flowerCanvasBgLeft:number,
+  flowerCanvasBgTop:number,
+  flowerCanvasHidden: boolean
 }
 
 // export interface LinkItemArea {
