@@ -204,6 +204,9 @@ Page({
         dialogShowMode: this.currentStationAllCorrect ? 1 : 2,
         stationCompleteTime: Math.floor((Date.now() - this.stationStartTime) / 1000)
       })
+      if (this.currentStationAllCorrect) {
+        this.successFlowers()
+      }
     } else {
       this.nextStation();
     }
@@ -282,7 +285,7 @@ Page({
       const context = canvas.getContext('2d')
       lottie.setup(canvas)
       this.ani = lottie.loadAnimation({
-        animationData:require('../../lottieJson/success-flowers.js'),
+        animationData: require('../../lottieJson/success-flowers.js'),
         autoplay: false,
         loop: false,
         rendererSettings: {
@@ -290,10 +293,10 @@ Page({
         },
       })
       this.ani.addEventListener("complete", () => {
-          console.log("当前动画执行完毕")
-          this.setData({
-            flowerCanvasHidden: true
-          })
+        console.log("当前动画执行完毕")
+        this.setData({
+          flowerCanvasHidden: true
+        })
       })
     }).exec()
     this.stationStartTime = Date.now();
@@ -358,7 +361,6 @@ Page({
   },
 
   tipsAction() {
-    this.successFlowers()
     this.setData({
       dialogShowMode: 3
     })
