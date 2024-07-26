@@ -71,6 +71,10 @@
   </view>
   <canvas id="myCanvas" type="2d" style="top: {{barHeight+canvasTopMargin+'px'}};left: 0;position: absolute; width:{{canvasW}}px; height:{{canvasH}}px;">
   </canvas>
+
+  <image id="shareIcon" src="https://oss.fxwljy.com/attach/file1721963032670.png"
+  hidden="true">
+  </image>
 </view>
 
 <page-container custom-style="background-color:transparent;" position="center" show="{{pageWxs.dialogShow(dialogShowMode)}}" overlay style="width: 100vw;height: 100vh;" z-index="1010" bind:afterleave="onDialogDismiss" bind:clickoverlay="onClickOverlay">

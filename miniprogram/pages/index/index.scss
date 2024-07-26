@@ -204,3 +204,13 @@ $tipFirstTransform3 : calc(#{$tipWordDialogHeight}/2 * -1 + #{$tipWordImageHeigh
 .tipWordRoot.third {
   transform: translate(-50%, $tipFirstTransform3);
 }
+
+#shareIcon{
+  margin-right: 48rpx;
+  margin-bottom: 200rpx;
+  width: 140rpx;
+  height: 155rpx;
+  position:absolute;
+  right: 0;
+  bottom: 0;
+}
