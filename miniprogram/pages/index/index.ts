@@ -34,6 +34,7 @@ Page({
     dialogShowMode: 0,
     words: [] as WordBean[],
     flowerCanvasHidden: true,
+    addWrong:wx.getStorageSync("addWrong")
   } as WordDataInterface,
   // lottie 动画对象
   ani: null as any,
@@ -418,5 +419,15 @@ Page({
         dialogShowMode: 0
       })
     }
+  },
+  changeAddWrong(){
+    let addWrong = !this.data.addWrong
+    wx.setStorage({
+      key:"addWrong",
+      data:addWrong
+    })
+    this.setData({
+      addWrong:addWrong
+    })
   }
 })

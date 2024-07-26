@@ -85,8 +85,9 @@
       <image src="https://oss.fxwljy.com/attach/file1721642867322.png" mode="aspectFit" id="next" bind:tap="nextStation"></image>
     </image>
     <view id="bottomTip">
-      <checkbox></checkbox>
-      <view>错词将自动加入错题本</view>
+      <van-checkbox value="{{ addWrong }}" shape="square"  bind:change="changeAddWrong" icon-size="32rpx"
+      checked-color="#2E4026"
+      label-class="checkboxLabel">错词将自动加入错题本</van-checkbox>
     </view>
   </view>
 

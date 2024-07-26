@@ -181,7 +181,8 @@ $tipFirstTransform3 : calc(#{$tipWordDialogHeight}/2 * -1 + #{$tipWordImageHeigh
 
 .tipWordRoot span {
   color: #0A0D0F;
-  display: inline-block; /* 保持文本在同一行 */
+  display: inline-block;
+  /* 保持文本在同一行 */
 }
 
 .marquee-animate {
@@ -189,8 +190,13 @@ $tipFirstTransform3 : calc(#{$tipWordDialogHeight}/2 * -1 + #{$tipWordImageHeigh
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .tipWordRoot.first {
@@ -205,12 +211,16 @@ $tipFirstTransform3 : calc(#{$tipWordDialogHeight}/2 * -1 + #{$tipWordImageHeigh
   transform: translate(-50%, $tipFirstTransform3);
 }
 
-#shareIcon{
+#shareIcon {
   margin-right: 48rpx;
   margin-bottom: 200rpx;
   width: 140rpx;
   height: 155rpx;
-  position:absolute;
+  position: absolute;
   right: 0;
   bottom: 0;
+}
+
+.van-checkbox__icon--square {
+  border-radius: 4rpx
 }
