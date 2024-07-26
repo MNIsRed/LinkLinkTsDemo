@@ -367,7 +367,7 @@ Page({
     this.setData({
       dialogShowMode: 3
     })
-    this.successFlowers()
+    // this.successFlowers()
   },
   successFlowers() {
     console.log("=======执行撒花动画")
