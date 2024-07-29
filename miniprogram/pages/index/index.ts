@@ -381,7 +381,7 @@ Page({
     console.log("222222")
     this.stopBackground = !this.stopBackground;
     this.setData({
-      isMute: !this.data.isMute
+      isMute: this.stopBackground
     })
     wx.setStorage({
       key: "stopBackground",
