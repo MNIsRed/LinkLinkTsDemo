@@ -34,7 +34,8 @@ Page({
     dialogShowMode: 0,
     words: [] as WordBean[],
     flowerCanvasHidden: true,
-    addWrong:wx.getStorageSync("addWrong")
+    addWrong:wx.getStorageSync("addWrong"),
+    isMute: false
   } as WordDataInterface,
   // lottie 动画对象
   ani: null as any,
@@ -379,6 +380,9 @@ Page({
   stopOrStartBackground() {
     console.log("222222")
     this.stopBackground = !this.stopBackground;
+    this.setData({
+      isMute: !this.data.isMute
+    })
     wx.setStorage({
       key: "stopBackground",
       data: this.stopBackground,
