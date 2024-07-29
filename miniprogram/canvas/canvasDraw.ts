@@ -91,7 +91,7 @@ class CanvasDraw {
       let pointLine = unFinishPointLineArr[0]
       if (pointLine.startPoint && pointLine.startPoint.x === linePoint.x) {
         pointLine.startPoint = linePoint
-        this.removeExistPointToLine(linePoint, lineColor)
+        this.removeExistPointToLine(linePoint, lineColor, false)
         return
       }
       pointLine.endPoint = linePoint
@@ -102,7 +102,7 @@ class CanvasDraw {
     this.removeExistPointToLine(linePoint, lineColor)
   }
 
-  removeExistPointToLine(linePoint: Point, lineColor: string) {
+  removeExistPointToLine(linePoint: Point, lineColor: string, isAddNewPoint: boolean = true) {
     if (!this.pointContainer) {
       return
     }
@@ -122,6 +122,9 @@ class CanvasDraw {
     })
     console.log("=======找到已完成连线的item", linePoint,this.pointContainer.points,existPointToLine)
     if (!existPointToLine.startPoint) {
+      if (!isAddNewPoint) {
+        return
+      }
       let pointLine: PointToLine = {
         startPoint: linePoint,
         lineColor: lineColor
@@ -143,6 +146,9 @@ class CanvasDraw {
       return !(value.startPoint.x === existPointToLine.startPoint.x && value.startPoint.y === existPointToLine.startPoint.y && value.isFinishStroke)
     })
     this.pointContainer.points = tempPointLineArr
+    if (!isAddNewPoint) {
+      return
+    }
     let pointLine: PointToLine = {
       startPoint: linePoint,
       lineColor: lineColor
