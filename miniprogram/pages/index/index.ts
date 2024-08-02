@@ -34,7 +34,8 @@ Page({
     dialogShowMode: 0,
     words: [] as WordBean[],
     flowerCanvasHidden: true,
-    addWrong:wx.getStorageSync("addWrong")
+    addWrong: wx.getStorageSync("addWrong"),
+    isMute: false
   } as WordDataInterface,
   // lottie 动画对象
   ani: null as any,
@@ -185,11 +186,22 @@ Page({
         }
       });
 
+      const innerAudioContext = wx.createInnerAudioContext()
+      innerAudioContext.autoplay = true
+      innerAudioContext.onPlay(() => {
+        console.log('开始播放')
+      })
+      innerAudioContext.onError((res) => {
+        console.log(res.errMsg)
+        console.log(res.errCode)
+      })
       if (allCorrect) {
+        innerAudioContext.src = '/pages/music/small_station_success.mp3'
         setTimeout(() => {
           this.nextPage();
         }, 500)
       } else {
+        innerAudioContext.src = '/pages/music/small_station_fail.mp3'
         setTimeout(() => {
           this.retryPage();
         }, 2000)
@@ -206,6 +218,16 @@ Page({
         stationCompleteTime: Math.floor((Date.now() - this.stationStartTime) / 1000)
       })
       if (this.currentStationAllCorrect) {
+        const innerAudioContext = wx.createInnerAudioContext()
+        innerAudioContext.autoplay = true
+        innerAudioContext.src = "/pages/music/big_level_success.mp3"
+        innerAudioContext.onPlay(() => {
+          console.log('开始播放')
+        })
+        innerAudioContext.onError((res) => {
+          console.log(res.errMsg)
+          console.log(res.errCode)
+        })
         this.successFlowers()
       }
     } else {
@@ -283,7 +305,7 @@ Page({
         flowerCanvasH: canvasH,
         flowerCanvasBgLeft: (canvasW - windowInfo.windowWidth) * -0.5,
         flowerCanvasBgTop: -250
-        
+
       })
       const context = canvas.getContext('2d')
       lottie.setup(canvas)
@@ -379,6 +401,9 @@ Page({
   stopOrStartBackground() {
     console.log("222222")
     this.stopBackground = !this.stopBackground;
+    this.setData({
+      isMute: this.stopBackground
+    })
     wx.setStorage({
       key: "stopBackground",
       data: this.stopBackground,
@@ -423,14 +448,14 @@ Page({
       })
     }
   },
-  changeAddWrong(){
+  changeAddWrong() {
     let addWrong = !this.data.addWrong
     wx.setStorage({
-      key:"addWrong",
-      data:addWrong
+      key: "addWrong",
+      data: addWrong
     })
     this.setData({
-      addWrong:addWrong
+      addWrong: addWrong
     })
   }
 })

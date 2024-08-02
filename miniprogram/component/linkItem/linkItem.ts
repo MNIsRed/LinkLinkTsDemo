@@ -241,16 +241,16 @@ Component({
       return this.data.linkedResult
     },
     playMusic() {
-      // const innerAudioContext = wx.createInnerAudioContext()
-      // innerAudioContext.autoplay = true
-      // innerAudioContext.src = '/pages/music/s26wp-2ae6p.mp3'
-      // innerAudioContext.onPlay(() => {
-      //   console.log('开始播放')
-      // })
-      // innerAudioContext.onError((res) => {
-      //   console.log(res.errMsg)
-      //   console.log(res.errCode)
-      // })
+      const innerAudioContext = wx.createInnerAudioContext()
+      innerAudioContext.autoplay = true
+      innerAudioContext.src = '/pages/music/selected_audio.mp3'
+      innerAudioContext.onPlay(() => {
+        console.log('开始播放')
+      })
+      innerAudioContext.onError((res) => {
+        console.log(res.errMsg)
+        console.log(res.errCode)
+      })
       this.vibrateShort();
     },
     vibrateShort() {

@@ -55,7 +55,7 @@
     </view>
     <view class="center-right-items-bg" catch:tap="stopOrStartBackground" style="z-index: 1000;">
       <view class="center-audio-btn">
-        <text class="iconfont icon-shengyin"></text>
+        <text class="iconfont {{isMute ? 'icon-jingyin' : 'icon-shengyin'}}"></text>
       </view>
       <view class="center-time-bg">
         <text class="iconfont icon-miaobiao "></text>
