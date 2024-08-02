@@ -80,4 +80,8 @@ export function status2Color(status: Status) {
   }
 }
 
+export enum TouchMode {
+  start, move, end
+}
+
 

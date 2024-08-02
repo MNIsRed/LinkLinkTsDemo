@@ -1,6 +1,6 @@
 // index.ts
 import { CanvasDraw } from "../../canvas/canvasDraw";
-import { WordDataInterface, Status, LinkAreaCoordinate, status2Color, WordBean, LinkResult } from '../../utils/linkCommon';
+import { WordDataInterface, Status, LinkAreaCoordinate, status2Color, WordBean, LinkResult, TouchMode } from '../../utils/linkCommon';
 import { find2DIndices, convertToPx } from '../../utils/util'
 import { allWords, allWords2 } from '../../utils/mock'
 import lottie from 'lottie-miniprogram'
@@ -63,8 +63,22 @@ Page({
       size: true
     })
     query.exec((res) => {
-      console.log("单词区域", res)
-      app.globalData.area = res
+      console.log("单词区域", res);
+      // 增加触摸空间
+      const verticalPadding = convertToPx(48);
+      const horizonPadding = convertToPx(24);
+      app.globalData.area = (res as Array<Array<LinkItemArea>>).map<Array<LinkItemArea>>((
+        arrayItem
+      ) => {
+        return arrayItem.map((item) => {
+          return {
+            left: item.left - horizonPadding,
+            right: item.right + horizonPadding,
+            top: item.top - verticalPadding,
+            bottom: item.bottom + verticalPadding
+          }
+        })
+      })
     });
   },
   nextPage() {
@@ -88,7 +102,18 @@ Page({
       this.data.canvasTool.cleanAllLine();
     }
   },
-  touchBegin(event: WechatMiniprogram.Touch, isMove: boolean): TouchActionBean {
+  // 触发的来源，0 对应 start ，1 对应 move，2 对应 end
+  touchBegin(event: WechatMiniprogram.Touch, touchMode: TouchMode): TouchActionBean {
+    let area = null
+    var linkAreaCoordinate = {
+      from: null,
+      end: null
+    }
+    // 移动中不可选中
+    if (touchMode == TouchMode.move) return {
+      area: area,
+      linkFinished: linkAreaCoordinate
+    }
     const x = event.changedTouches[0].clientX;
     const y = event.changedTouches[0].clientY;
 
@@ -100,13 +125,9 @@ Page({
       }
       return false;
     })
-    let area = null
-    var linkAreaCoordinate = {
-      from: null,
-      end: null
-    }
+
     if (targetElement != null) {
-      linkAreaCoordinate = linkItem.startSelect(targetElement.row, targetElement.col, isMove);
+      linkAreaCoordinate = linkItem.startSelect(targetElement.row, targetElement.col, touchMode);
       area = app.globalData.area[targetElement.row][targetElement.col];
     }
     // if (!hasFindItem) {
@@ -128,7 +149,7 @@ Page({
     console.log("开始点击", e)
     if (linkFinished) return;
     canMove = true;
-    let touchAction = this.touchBegin(e as WechatMiniprogram.Touch, false);
+    let touchAction = this.touchBegin(e as WechatMiniprogram.Touch, TouchMode.start);
     if (touchAction.area != null) {
       if (touchAction.linkFinished.from != null && touchAction.linkFinished.end != null) {
         this.data.canvasTool.canvasTouchStart(e, touchAction.area, status2Color(Status.SELECTED));
@@ -151,26 +172,48 @@ Page({
       return;
     }
     if (!canMove || linkFinished) return;
-    let touchAction = this.touchBegin(e as WechatMiniprogram.Touch, true);
+    let touchAction = this.touchBegin(e as WechatMiniprogram.Touch, TouchMode.move);
     if (touchAction.area != null) {
       if (touchAction.linkFinished.from != null && touchAction.linkFinished.end != null) {
         canMove = false;
         this.data.canvasTool.canvasTouchMove(e)
         this.data.canvasTool.pointToLineFinish(app.globalData.area[touchAction.linkFinished.from.row][touchAction.linkFinished.from.col], app.globalData.area[touchAction.linkFinished.end.row][touchAction.linkFinished.end.col], status2Color(Status.SELECTED));
         this.checkLinkFinished();
-      } else if (touchAction.linkFinished.from != null || touchAction.linkFinished.end != null) {
-        this.data.canvasTool.canvasTouchStart(e, touchAction.area, "#FCC434")
-      } else {
-        this.data.canvasTool.canvasTouchMove(e)
-      }
+      } else
+        if (touchAction.linkFinished.from != null || touchAction.linkFinished.end != null) {
+          this.data.canvasTool.canvasTouchStart(e, touchAction.area, "#FCC434")
+        } else {
+          this.data.canvasTool.canvasTouchMove(e)
+        }
     } else {
       this.data.canvasTool.canvasTouchMove(e)
     }
   },
 
   canvasTouchEnd(e: any) {
+    console.log("canvasTouchEnd", e)
+    if (!canMove || linkFinished) return;
+    e.touches = [{
+      clientX: e.changedTouches[0].clientX,
+      clientY: e.changedTouches[0].clientY,
+    }]
+    let touchAction = this.touchBegin(e as WechatMiniprogram.Touch, TouchMode.end);
+    if (touchAction.area != null) {
+      if (touchAction.linkFinished.from != null && touchAction.linkFinished.end != null) {
+        canMove = false;
+        this.data.canvasTool.canvasTouchMove(e as WechatMiniprogram.Touch)
+
+        this.data.canvasTool.pointToLineFinish(app.globalData.area[touchAction.linkFinished.from.row][touchAction.linkFinished.from.col], app.globalData.area[touchAction.linkFinished.end.row][touchAction.linkFinished.end.col], status2Color(Status.SELECTED));
+        this.checkLinkFinished();
+      } else {
+        this.data.canvasTool.canvasTouchEnd()
+      }
+    } else {
+      this.data.canvasTool.canvasTouchEnd()
+    }
+
     console.log("触发canvasTouchEnd")
-    this.data.canvasTool.canvasTouchEnd()
+
   },
   checkLinkFinished() {
     const linkItem = this.selectComponent("#linkItem")

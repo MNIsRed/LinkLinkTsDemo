@@ -1,5 +1,5 @@
 // component/linkItem/linkItem.ts
-import { WordBean, Status, status2Color, LinkAreaCoordinate, LinkResult } from '../../utils/linkCommon';
+import { WordBean, Status, status2Color, LinkAreaCoordinate, LinkResult, TouchMode } from '../../utils/linkCommon';
 import { shuffleArray, Coordinate, save2ErrorBook } from '../../utils/util'
 
 
@@ -35,7 +35,7 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    startSelect(index: number, position: number, isMove: boolean): LinkAreaCoordinate {
+    startSelect(index: number, position: number, touchMode: TouchMode): LinkAreaCoordinate {
       console.log("当前点击选中", this.data.status)
       var oldSelectedAreaIndex = -1;
       var oldSelectedPosition = -1;
@@ -47,7 +47,8 @@ Component({
           }
         })
       })
-      if (oldSelectedAreaIndex == -1) {
+      //start 才能触发 未选择->选择中 状态
+      if (oldSelectedAreaIndex == -1 && touchMode == TouchMode.start) {
         //未在选择中
         this.checkItemLinked(index, position);
 
@@ -63,7 +64,7 @@ Component({
           },
           end: null
         }
-      } else if (oldSelectedAreaIndex != index) {
+      } else if (oldSelectedAreaIndex != -1 && oldSelectedAreaIndex != index) {
         //选择中，划到了另一侧数据
         this.checkItemLinked(index, position);
 
@@ -129,7 +130,7 @@ Component({
             col: position
           }
         };
-      } else if(!isMove){
+      } else if (oldSelectedAreaIndex != -1 && touchMode == TouchMode.start) {
         //虽然在选择中，但是选择了同侧数据
         //1.清除之前的选中
         this.setData({
@@ -140,7 +141,7 @@ Component({
         //3.选中当前的 item
 
         //4.返回当前的 item
-        return this.startSelect(index, position,isMove)
+        return this.startSelect(index, position, touchMode)
       }
       return {
         from: null,
